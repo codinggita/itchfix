@@ -45,10 +45,14 @@ const Sidebar = () => {
                 : 'text-text-faint border-l-2 border-transparent hover:text-text-secondary hover:bg-white/5'}
             `}
           >
-            <span className={({ isActive }) => isActive ? 'text-trust-teal' : 'text-text-faint'}>
-              {item.icon}
-            </span>
-            {item.name}
+            {({ isActive }) => (
+              <>
+                <span className={isActive ? 'text-trust-teal' : 'text-text-faint'}>
+                  {item.icon}
+                </span>
+                {item.name}
+              </>
+            )}
           </NavLink>
         ))}
       </nav>
