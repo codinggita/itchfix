@@ -17,10 +17,14 @@ import TimelineItem from '../components/ui/TimelineItem';
 import Badge from '../components/ui/Badge';
 import SearchBar from '../components/ui/SearchBar';
 import UserProfileCard from '../components/ui/UserProfileCard';
+import DocumentCard from '../components/ui/DocumentCard';
+import ReviewCard from '../components/ui/ReviewCard';
+import FilterPill from '../components/ui/FilterPill';
 import { Plus } from 'lucide-react';
 
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('All');
 
   const chartData = [
     { month: 'Jan', value: 85 },
@@ -53,7 +57,8 @@ export default function Dashboard() {
     { name: 'Rajesh Auto Parts', score: 42, gst: '08AABCR4567E5Z7', status: 'risky' },
   ];
 
-  return (    <div className="p-8 max-w-7xl mx-auto space-y-12">
+  return (
+    <div className="p-8 max-w-7xl mx-auto space-y-12">
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold font-display text-trust-teal">TrustBiz Dashboard</h1>
@@ -64,74 +69,64 @@ export default function Dashboard() {
         </Button>
       </header>
 
-      {/* Batch 5 Components Preview Section */}
+      {/* Batch 6 Components Preview Section */}
       <section className="space-y-6 bg-card-bg/30 p-8 rounded-card border border-dashed border-border-main">
-        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 5 UI Preview</h2>
+        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 6 UI Preview</h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Badges Showcase */}
+          {/* Filter Pills */}
           <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Pill Badges</h3>
-            <div className="flex flex-wrap gap-3 p-4 bg-card-bg rounded-card border border-border-main">
-              <Badge variant="teal" prefix="✓">Verified</Badge>
-              <Badge variant="amber" prefix="!">Pending</Badge>
-              <Badge variant="red" prefix="⚠">Risky</Badge>
-              <Badge variant="purple">Growth</Badge>
-              <Badge variant="pink">Disputed</Badge>
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Quick Filters</h3>
+            <div className="flex flex-wrap gap-2">
+              {['All', 'Verified', 'Pending', 'Risky'].map(f => (
+                <FilterPill 
+                  key={f} 
+                  label={f} 
+                  isActive={activeFilter === f} 
+                  count={f === 'All' ? 24 : f === 'Verified' ? 18 : 3}
+                  onClick={() => setActiveFilter(f)} 
+                />
+              ))}
             </div>
           </div>
 
-          {/* Search Bar Showcase */}
+          {/* Document Card Showcase */}
           <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Search Components</h3>
-            <div className="p-4 bg-card-bg rounded-card border border-border-main h-full flex items-center justify-center">
-              <SearchBar placeholder="Search everything..." width="100%" />
-            </div>
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Documents & Invoices</h3>
+            <DocumentCard 
+              title="GST_Certificate_2026.pdf" 
+              size="1.2 MB" 
+              status="verified" 
+              date="20 APR" 
+            />
           </div>
 
-          {/* User Card Showcase */}
+          {/* Review Card Showcase */}
           <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">User Profile Cards</h3>
-            <div className="space-y-3 p-4 bg-card-bg rounded-card border border-border-main">
-              <UserProfileCard name="Rahul Shah" isVerified={true} />
-              <UserProfileCard name="Amit Patel" plan="Free" isVerified={false} />
-            </div>
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Supplier Reviews</h3>
+            <ReviewCard 
+              author="Sunil Verma" 
+              company="Verma Logistics" 
+              rating={5} 
+              comment="Excellent quality and on-time delivery. Highly recommended!" 
+              date="15 APR" 
+            />
           </div>
         </div>
       </section>
 
-      {/* Previous Batches... */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <div className="space-y-4">
-          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Step Wizard</h3>
-          <StepIndicator currentStep={2} steps={['Info', 'Verify', 'Type', 'Live']} />
-        </div>
-        <div className="bg-card-bg p-6 rounded-card border border-border-main">
-          <TimelineItem title="Dispute Raised" description="Buyer flagged quality issues." date="28 APR" type="danger" />
-          <TimelineItem title="Evidence Uploaded" description="Supplier sent images." date="29 APR" type="info" isLast />
-        </div>
-      </div>
-
-      <UrgentActionPanel 
-        title="Action Required: 2 Risky Suppliers Detected"
-        description="Rajesh Auto Parts and Mehta Pharma have shown suspicious activity."
-        buttonText="Review Now"
-      />
-
+      {/* Previous Batches Section... */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <section className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-2 space-y-8">
           <ComplianceBarChart data={chartData} />
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-text-secondary">Recent Suppliers</h2>
-              <div className="w-64">
-                <SearchBar placeholder="Search suppliers..." width="100%" />
-              </div>
+              <SearchBar placeholder="Search suppliers..." width="280px" />
             </div>
             <DataTable columns={columns} data={data} />
           </div>
-        </section>
-
+        </div>
         <aside className="space-y-8">
           <section className="bg-[#0A1628] p-6 rounded-card border border-border-main">
             <h2 className="text-lg font-semibold text-text-secondary mb-6">AI Negotiation</h2>
