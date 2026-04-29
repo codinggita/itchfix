@@ -14,7 +14,10 @@ import Modal from '../components/ui/Modal';
 import StepIndicator from '../components/ui/StepIndicator';
 import MilestoneRow from '../components/ui/MilestoneRow';
 import TimelineItem from '../components/ui/TimelineItem';
-import { Search, Plus } from 'lucide-react';
+import Badge from '../components/ui/Badge';
+import SearchBar from '../components/ui/SearchBar';
+import UserProfileCard from '../components/ui/UserProfileCard';
+import { Plus } from 'lucide-react';
 
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,8 +53,7 @@ export default function Dashboard() {
     { name: 'Rajesh Auto Parts', score: 42, gst: '08AABCR4567E5Z7', status: 'risky' },
   ];
 
-  return (
-    <div className="p-8 max-w-7xl mx-auto space-y-12">
+  return (    <div className="p-8 max-w-7xl mx-auto space-y-12">
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold font-display text-trust-teal">TrustBiz Dashboard</h1>
@@ -62,64 +64,57 @@ export default function Dashboard() {
         </Button>
       </header>
 
-      {/* Batch 4 Components Preview Section */}
+      {/* Batch 5 Components Preview Section */}
       <section className="space-y-6 bg-card-bg/30 p-8 rounded-card border border-dashed border-border-main">
-        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 4 UI Preview</h2>
+        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 5 UI Preview</h2>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Onboarding Steps */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Badges Showcase */}
           <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Step Wizard (Onboarding)</h3>
-            <div className="py-6">
-              <StepIndicator 
-                currentStep={2} 
-                steps={['Company Info', 'Verification', 'Business Type', 'Go Live']} 
-              />
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Pill Badges</h3>
+            <div className="flex flex-wrap gap-3 p-4 bg-card-bg rounded-card border border-border-main">
+              <Badge variant="teal" prefix="✓">Verified</Badge>
+              <Badge variant="amber" prefix="!">Pending</Badge>
+              <Badge variant="red" prefix="⚠">Risky</Badge>
+              <Badge variant="purple">Growth</Badge>
+              <Badge variant="pink">Disputed</Badge>
             </div>
           </div>
 
-          {/* Timeline */}
+          {/* Search Bar Showcase */}
           <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Dispute Timeline</h3>
-            <div className="bg-card-bg p-6 rounded-card border border-border-main">
-              <TimelineItem 
-                title="Dispute Raised" 
-                description="Buyer flagged 'Quality Mismatch' for Invoice #TB-902." 
-                date="28 APR, 2:30 PM" 
-                type="danger"
-              />
-              <TimelineItem 
-                title="Evidence Uploaded" 
-                description="Supplier provided 4 images and delivery receipt." 
-                date="29 APR, 10:15 AM" 
-                type="info"
-              />
-              <TimelineItem 
-                title="AI Analysis In Progress" 
-                description="Analyzing evidence against agreed quality standards." 
-                date="TODAY" 
-                type="warning"
-                isLast
-              />
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Search Components</h3>
+            <div className="p-4 bg-card-bg rounded-card border border-border-main h-full flex items-center justify-center">
+              <SearchBar placeholder="Search everything..." width="100%" />
             </div>
           </div>
-        </div>
 
-        {/* Milestone Tracker */}
-        <div className="space-y-4">
-          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Escrow Milestones (Textile Bulk Order)</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <MilestoneRow label="Order Confirmation" amount="₹45,000" isReleased />
-            <MilestoneRow label="Quality Check" amount="₹1,35,000" isCurrent />
-            <MilestoneRow label="Final Delivery" amount="₹2,70,000" />
+          {/* User Card Showcase */}
+          <div className="space-y-4">
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">User Profile Cards</h3>
+            <div className="space-y-3 p-4 bg-card-bg rounded-card border border-border-main">
+              <UserProfileCard name="Rahul Shah" isVerified={true} />
+              <UserProfileCard name="Amit Patel" plan="Free" isVerified={false} />
+            </div>
           </div>
         </div>
       </section>
 
       {/* Previous Batches... */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="space-y-4">
+          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Step Wizard</h3>
+          <StepIndicator currentStep={2} steps={['Info', 'Verify', 'Type', 'Live']} />
+        </div>
+        <div className="bg-card-bg p-6 rounded-card border border-border-main">
+          <TimelineItem title="Dispute Raised" description="Buyer flagged quality issues." date="28 APR" type="danger" />
+          <TimelineItem title="Evidence Uploaded" description="Supplier sent images." date="29 APR" type="info" isLast />
+        </div>
+      </div>
+
       <UrgentActionPanel 
         title="Action Required: 2 Risky Suppliers Detected"
-        description="Rajesh Auto Parts and Mehta Pharma have shown suspicious activity. Review their TrustScores immediately."
+        description="Rajesh Auto Parts and Mehta Pharma have shown suspicious activity."
         buttonText="Review Now"
       />
 
@@ -130,7 +125,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-text-secondary">Recent Suppliers</h2>
               <div className="w-64">
-                <Input placeholder="Search..." icon={<Search size={14} />} />
+                <SearchBar placeholder="Search suppliers..." width="100%" />
               </div>
             </div>
             <DataTable columns={columns} data={data} />
@@ -141,8 +136,8 @@ export default function Dashboard() {
           <section className="bg-[#0A1628] p-6 rounded-card border border-border-main">
             <h2 className="text-lg font-semibold text-text-secondary mb-6">AI Negotiation</h2>
             <div className="max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-              <NegotiationBubble sender="supplier" message="We need Net-30 payment terms for this order." time="10:30 AM" />
-              <NegotiationBubble sender="ai" message="Suggestion: Offer Net-20 with a 1.5% early payment discount." time="10:31 AM" />
+              <NegotiationBubble sender="supplier" message="Net-30 payment terms please." time="10:30 AM" />
+              <NegotiationBubble sender="ai" message="Suggestion: Offer Net-20 with 1.5% discount." time="10:31 AM" />
             </div>
           </section>
           <section className="bg-card-bg p-6 rounded-card border border-border-main space-y-6">
@@ -150,7 +145,6 @@ export default function Dashboard() {
             <div className="space-y-6">
               <InventoryProgressBar label="Cotton Fabric" percentage={82} />
               <InventoryProgressBar label="Steel Bolts" percentage={15} />
-              <InventoryProgressBar label="Packaging Material" percentage={3} />
             </div>
           </section>
         </aside>
@@ -158,7 +152,7 @@ export default function Dashboard() {
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create New Transaction">
         <div className="space-y-6">
-          <Input label="Supplier Name" placeholder="Search registered suppliers..." />
+          <Input label="Supplier Name" placeholder="Search suppliers..." />
           <div className="grid grid-cols-2 gap-4">
             <Input label="Amount" placeholder="₹ 0.00" />
             <Input label="GST (Optional)" placeholder="27AABCR..." />
