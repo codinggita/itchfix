@@ -5,6 +5,9 @@ import TrustScoreRing from '../components/ui/TrustScoreRing';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import DataTable from '../components/ui/Table';
+import SupplierCard from '../components/ui/SupplierCard';
+import UrgentActionPanel from '../components/ui/UrgentActionPanel';
+import InventoryProgressBar from '../components/ui/ProgressBar';
 import { Search, Plus } from 'lucide-react';
 
 export default function Dashboard() {
@@ -30,6 +33,14 @@ export default function Dashboard() {
     { name: 'Rajesh Auto Parts', score: 42, gst: '08AABCR4567E5Z7', status: 'risky' },
   ];
 
+  const featuredSupplier = {
+    name: 'Reliance Textiles Pvt Ltd',
+    gst: '27AABCR1234A1Z5',
+    score: 94,
+    verifiedFlags: { gst: true, pan: true, bank: true },
+    status: 'verified'
+  };
+
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-10">
       <header className="flex items-center justify-between">
@@ -42,6 +53,13 @@ export default function Dashboard() {
         </Button>
       </header>
 
+      {/* Urgent Action Section */}
+      <UrgentActionPanel 
+        title="Action Required: 2 Risky Suppliers Detected"
+        description="Rajesh Auto Parts and Mehta Pharma have shown suspicious activity. Review their TrustScores immediately."
+        buttonText="Review Now"
+      />
+
       {/* Metric Cards Section */}
       <section>
         <h2 className="text-xl font-semibold mb-4 text-text-secondary">Key Metrics</h2>
@@ -53,7 +71,6 @@ export default function Dashboard() {
         </div>
       </section>
 
-      {/* Table & Form Components */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Suppliers Table */}
         <section className="lg:col-span-2 space-y-4">
@@ -66,19 +83,25 @@ export default function Dashboard() {
           <DataTable columns={columns} data={data} />
         </section>
 
-        {/* Buttons Showcase */}
-        <section className="bg-card-bg p-6 rounded-card border border-border-main space-y-6 h-fit">
-          <h2 className="text-lg font-semibold text-text-secondary">Action Controls</h2>
-          <div className="space-y-3">
-            <Button fullWidth>Confirm Deal</Button>
-            <Button variant="ghost" fullWidth>Download Invoice</Button>
-            <Button variant="danger" fullWidth>Report Dispute</Button>
-          </div>
-          <div className="pt-4 border-t border-border-main">
-            <h3 className="text-[11px] font-bold uppercase text-text-muted mb-3">Quick Search</h3>
-            <Input label="GST Number" placeholder="Enter GST..." error="Invalid GST format" />
-          </div>
-        </section>
+        {/* Sidebar Components */}
+        <aside className="space-y-8">
+          {/* Supplier Card Preview */}
+          <section className="space-y-4">
+            <h2 className="text-lg font-semibold text-text-secondary">Top Supplier</h2>
+            <SupplierCard supplier={featuredSupplier} />
+          </section>
+
+          {/* Stock Monitor Preview */}
+          <section className="bg-card-bg p-6 rounded-card border border-border-main space-y-6">
+            <h2 className="text-lg font-semibold text-text-secondary">Live Stock Monitor</h2>
+            <div className="space-y-6">
+              <InventoryProgressBar label="Cotton Fabric" percentage={82} />
+              <InventoryProgressBar label="Steel Bolts" percentage={15} />
+              <InventoryProgressBar label="Packaging Material" percentage={3} />
+            </div>
+            <Button variant="ghost" fullWidth className="mt-2">View All Alerts</Button>
+          </section>
+        </aside>
       </div>
     </div>
   );
