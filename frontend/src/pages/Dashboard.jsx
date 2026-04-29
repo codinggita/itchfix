@@ -20,11 +20,15 @@ import UserProfileCard from '../components/ui/UserProfileCard';
 import DocumentCard from '../components/ui/DocumentCard';
 import ReviewCard from '../components/ui/ReviewCard';
 import FilterPill from '../components/ui/FilterPill';
+import FileUploader from '../components/ui/FileUpload';
+import Skeleton, { SkeletonCard } from '../components/ui/Skeleton';
+import EmptyState from '../components/ui/EmptyState';
 import { Plus } from 'lucide-react';
 
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState('All');
+  const [isLoading, setIsLoading] = useState(false);
 
   const chartData = [
     { month: 'Jan', value: 85 },
@@ -58,60 +62,54 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-12">
+    <div className="p-8 max-w-7xl mx-auto space-y-12 pb-20">
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold font-display text-trust-teal">TrustBiz Dashboard</h1>
           <p className="text-text-muted mt-2">Welcome back, Rahul Shah (MSME Verified)</p>
         </div>
-        <Button variant="primary" onClick={() => setIsModalOpen(true)}>
-          <Plus size={16} /> New Transaction
-        </Button>
+        <div className="flex gap-4">
+          <Button variant="ghost" onClick={() => setIsLoading(!isLoading)}>
+            {isLoading ? 'Stop Loading' : 'Test Skeleton'}
+          </Button>
+          <Button variant="primary" onClick={() => setIsModalOpen(true)}>
+            <Plus size={16} /> New Transaction
+          </Button>
+        </div>
       </header>
 
-      {/* Batch 6 Components Preview Section */}
+      {/* Batch 7 Components Preview Section */}
       <section className="space-y-6 bg-card-bg/30 p-8 rounded-card border border-dashed border-border-main">
-        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 6 UI Preview</h2>
+        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 7 UI Preview</h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Filter Pills */}
-          <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Quick Filters</h3>
-            <div className="flex flex-wrap gap-2">
-              {['All', 'Verified', 'Pending', 'Risky'].map(f => (
-                <FilterPill 
-                  key={f} 
-                  label={f} 
-                  isActive={activeFilter === f} 
-                  count={f === 'All' ? 24 : f === 'Verified' ? 18 : 3}
-                  onClick={() => setActiveFilter(f)} 
-                />
-              ))}
-            </div>
+          {/* File Upload */}
+          <div className="lg:col-span-2 space-y-4">
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">File Uploader (KYC)</h3>
+            <FileUploader label="Upload MSME Certificate" />
           </div>
 
-          {/* Document Card Showcase */}
+          {/* Skeleton Loader Showcase */}
           <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Documents & Invoices</h3>
-            <DocumentCard 
-              title="GST_Certificate_2026.pdf" 
-              size="1.2 MB" 
-              status="verified" 
-              date="20 APR" 
-            />
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Skeleton Loading</h3>
+            {isLoading ? (
+              <SkeletonCard />
+            ) : (
+              <div className="p-5 bg-card-bg border border-border-main rounded-card text-center">
+                <p className="text-text-muted text-[13px] py-10">Click "Test Skeleton" to see loading state</p>
+              </div>
+            )}
           </div>
+        </div>
 
-          {/* Review Card Showcase */}
-          <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Supplier Reviews</h3>
-            <ReviewCard 
-              author="Sunil Verma" 
-              company="Verma Logistics" 
-              rating={5} 
-              comment="Excellent quality and on-time delivery. Highly recommended!" 
-              date="15 APR" 
-            />
-          </div>
+        {/* Empty State Showcase */}
+        <div className="space-y-4">
+          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Empty State (Table/List)</h3>
+          <EmptyState 
+            title="No Pending Disputes" 
+            description="All your transactions are currently in order. New disputes will appear here." 
+            actionText="Refresh Feed"
+          />
         </div>
       </section>
 
