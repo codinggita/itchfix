@@ -39,16 +39,16 @@ import Divider from '../components/ui/Divider';
 import ActionMenu from '../components/ui/ActionMenu';
 import AmountDisplay from '../components/ui/AmountDisplay';
 import Pagination from '../components/ui/Pagination';
-import { Plus, Info, Edit, Trash2, ExternalLink } from 'lucide-react';
+import RadioCard from '../components/ui/RadioCard';
+import FeatureCard from '../components/ui/FeatureCard';
+import StatMetric from '../components/ui/StatMetric';
+import { Plus, Info, Edit, Trash2, ExternalLink, Factory, Store, Zap, ShieldCheck } from 'lucide-react';
 
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
-  const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true);
-  const [isAgreed, setIsAgreed] = useState(false);
   const [toasts, setToasts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedBizType, setSelectedBizType] = useState('mfg');
 
   const addToast = (message, type) => {
     const id = Date.now();
@@ -59,15 +59,6 @@ export default function Dashboard() {
   const removeToast = (id) => {
     setToasts(currentToasts => currentToasts.filter(t => t.id !== id));
   };
-
-  const chartData = [
-    { month: 'Jan', value: 85 },
-    { month: 'Feb', value: 72 },
-    { month: 'Mar', value: 91 },
-    { month: 'Apr', value: 78 },
-    { month: 'May', value: 94 },
-    { month: 'Jun', value: 88 },
-  ];
 
   const columns = [
     { header: 'Supplier Name', accessor: 'name' },
@@ -91,9 +82,9 @@ export default function Dashboard() {
       accessor: 'id',
       render: () => (
         <ActionMenu actions={[
-          { label: 'View Details', icon: <ExternalLink size={14} />, onClick: () => addToast('Opening details...', 'info') },
-          { label: 'Edit Info', icon: <Edit size={14} />, onClick: () => addToast('Edit mode active', 'warning') },
-          { label: 'Delete', icon: <Trash2 size={14} />, variant: 'danger', onClick: () => addToast('Supplier removed', 'error') }
+          { label: 'View Details', icon: <ExternalLink size={14} />, onClick: () => {} },
+          { label: 'Edit Info', icon: <Edit size={14} />, onClick: () => {} },
+          { label: 'Delete', icon: <Trash2 size={14} />, variant: 'danger', onClick: () => {} }
         ]} />
       )
     }
@@ -108,91 +99,69 @@ export default function Dashboard() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-12 pb-20 relative">
-      {/* Toast Container */}
       <div className="fixed top-8 right-8 z-[200] space-y-4">
         <AnimatePresence>
           {toasts.map((toast) => (
-            <Toast 
-              key={toast.id} 
-              message={toast.message} 
-              type={toast.type} 
-              onClose={() => removeToast(toast.id)} 
-            />
+            <Toast key={toast.id} message={toast.message} type={toast.type} onClose={() => removeToast(toast.id)} />
           ))}
         </AnimatePresence>
       </div>
 
       <header className="flex items-center justify-between">
         <div className="space-y-1">
-          <Breadcrumbs items={[
-            { label: 'TrustBiz', path: '/' },
-            { label: 'Dashboard', path: '/dashboard' }
-          ]} />
+          <Breadcrumbs items={[{ label: 'TrustBiz', path: '/' }, { label: 'Dashboard', path: '/dashboard' }]} />
           <h1 className="text-3xl font-bold font-display text-trust-teal">TrustBiz Dashboard</h1>
           <p className="text-text-muted">Welcome back, Rahul Shah (MSME Verified)</p>
         </div>
-        <div className="flex gap-4">
-          <Button variant="ghost" onClick={() => addToast('System scan complete.', 'success')}>
-            Scan Status
-          </Button>
-          <Button variant="primary" onClick={() => setIsModalOpen(true)}>
-            <Plus size={16} /> New Transaction
-          </Button>
-        </div>
+        <Button variant="primary" onClick={() => setIsModalOpen(true)}>
+          <Plus size={16} /> New Transaction
+        </Button>
       </header>
 
-      {/* Batch 12 Components Preview Section */}
+      {/* Batch 13 Components Preview Section */}
       <section className="space-y-8 bg-card-bg/30 p-8 rounded-card border border-dashed border-border-main">
-        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 12 UI Preview</h2>
+        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 13 UI Preview</h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Amount Display Showcase */}
+          {/* Feature Card */}
+          <FeatureCard 
+            title="Smart Escrow" 
+            description="Secure your payments with milestone-based locking and automated release." 
+            icon={<ShieldCheck size={28} />}
+            color="teal"
+          />
+
+          {/* Radio Cards */}
           <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Financial Formatting</h3>
-            <div className="p-5 bg-card-bg rounded-card border border-border-main flex flex-col gap-4">
-              <div className="flex justify-between items-center">
-                <span className="text-[11px] text-text-ghost uppercase font-bold">Total Balance</span>
-                <AmountDisplay value="12,40,000" size="lg" color="text-trust-teal" />
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-[11px] text-text-ghost uppercase font-bold">Escrow Locked</span>
-                <AmountDisplay value="8,25,000" size="md" color="text-trust-amber" />
-              </div>
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider text-center">Business Selection</h3>
+            <div className="grid grid-cols-1 gap-3">
+              <RadioCard 
+                id="mfg" 
+                name="biz_type"
+                label="Manufacturing" 
+                description="Factories and production units." 
+                icon={<Factory size={18} />}
+                selected={selectedBizType}
+                onChange={setSelectedBizType}
+              />
+              <RadioCard 
+                id="retail" 
+                name="biz_type"
+                label="Retail/Trade" 
+                description="Shops and wholesale distributors." 
+                icon={<Store size={18} />}
+                selected={selectedBizType}
+                onChange={setSelectedBizType}
+              />
             </div>
           </div>
 
-          {/* Action Menu Showcase */}
+          {/* Stat Metrics */}
           <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Contextual Actions</h3>
-            <div className="p-5 bg-card-bg rounded-card border border-border-main flex items-center justify-center gap-10">
-              <div className="flex flex-col items-center gap-2">
-                <p className="text-[10px] text-text-ghost font-bold uppercase">Table Row</p>
-                <ActionMenu actions={[
-                  { label: 'View Profile', onClick: () => {} },
-                  { label: 'Contact', onClick: () => {} }
-                ]} />
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <p className="text-[10px] text-text-ghost font-bold uppercase">Card Action</p>
-                <ActionMenu actions={[
-                  { label: 'Download', icon: <Plus size={14} />, onClick: () => {} },
-                  { label: 'Delete', variant: 'danger', onClick: () => {} }
-                ]} />
-              </div>
-            </div>
-          </div>
-
-          {/* Pagination Showcase */}
-          <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Data Pagination</h3>
-            <div className="h-full flex items-end">
-              <div className="w-full">
-                <Pagination 
-                  currentPage={currentPage} 
-                  totalPages={3} 
-                  onPageChange={setCurrentPage} 
-                />
-              </div>
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider text-center">Quick Profile Stats</h3>
+            <div className="p-6 bg-card-bg rounded-card border border-border-main grid grid-cols-1 gap-6">
+              <StatMetric label="Avg Delivery Time" value="4.2 Days" trend={-12} subValue="20% faster than last month" />
+              <StatMetric label="Total Orders" value="1,248" trend={15} subValue="Verified transactions" />
             </div>
           </div>
         </div>
@@ -201,7 +170,10 @@ export default function Dashboard() {
       {/* Previous Batches Section... */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
-          <ComplianceBarChart data={chartData} />
+          <ComplianceBarChart data={[
+            { month: 'Jan', value: 85 }, { month: 'Feb', value: 72 }, { month: 'Mar', value: 91 },
+            { month: 'Apr', value: 78 }, { month: 'May', value: 94 }, { month: 'Jun', value: 88 },
+          ]} />
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-text-secondary">Recent Suppliers</h2>
@@ -235,11 +207,13 @@ export default function Dashboard() {
         <div className="space-y-6">
           <Dropdown label="Select Supplier" options={data.map(d => ({ label: d.name, value: d.gst }))} />
           <div className="grid grid-cols-2 gap-4">
-            <Input label="Amount" placeholder="₹ 0.00" />
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[11px] font-bold uppercase text-text-muted tracking-[0.08em] ml-1">Amount</label>
+              <AmountDisplay value="0.00" size="md" color="text-text-primary" />
+            </div>
             <Input label="GST Number" placeholder="27AABCR..." />
           </div>
           <TextArea label="Transaction Notes" placeholder="Add instructions..." rows={2} />
-          <Checkbox label="I confirm these terms are final" checked={isAgreed} onChange={setIsAgreed} />
           <div className="pt-4 flex gap-3">
             <Button variant="ghost" fullWidth onClick={() => setIsModalOpen(false)}>Cancel</Button>
             <Button variant="primary" fullWidth onClick={() => { addToast('Transaction Locked!', 'success'); setIsModalOpen(false); }}>Lock in Escrow</Button>
