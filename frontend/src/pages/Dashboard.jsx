@@ -33,6 +33,9 @@ import TextArea from '../components/ui/TextArea';
 import Checkbox from '../components/ui/Checkbox';
 import Tooltip from '../components/ui/Tooltip';
 import Toast from '../components/ui/Toast';
+import Avatar from '../components/ui/Avatar';
+import Accordion from '../components/ui/Accordion';
+import Divider from '../components/ui/Divider';
 import { Plus, Info } from 'lucide-react';
 
 export default function Dashboard() {
@@ -114,8 +117,8 @@ export default function Dashboard() {
           <p className="text-text-muted">Welcome back, Rahul Shah (MSME Verified)</p>
         </div>
         <div className="flex gap-4">
-          <Button variant="ghost" onClick={() => addToast('This is a test notification!', 'info')}>
-            Test Toast
+          <Button variant="ghost" onClick={() => addToast('System scan complete.', 'success')}>
+            Scan Status
           </Button>
           <Button variant="primary" onClick={() => setIsModalOpen(true)}>
             <Plus size={16} /> New Transaction
@@ -123,71 +126,73 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {/* Batch 10 Components Preview Section */}
+      {/* Batch 11 Components Preview Section */}
       <section className="space-y-8 bg-card-bg/30 p-8 rounded-card border border-dashed border-border-main">
-        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 10 UI Preview</h2>
+        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 11 UI Preview</h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Checkbox Showcase */}
+          {/* Avatar Showcase */}
           <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Form Selection</h3>
-            <div className="p-4 bg-card-bg rounded-card border border-border-main space-y-4">
-              <Checkbox label="Agree to terms" checked={isAgreed} onChange={setIsAgreed} />
-              <Checkbox label="Enable Escrow" checked={true} onChange={() => {}} />
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">User Avatars</h3>
+            <div className="flex items-center gap-4 p-4 bg-card-bg rounded-card border border-border-main">
+              <Avatar name="Rahul Shah" size="xl" isVerified status="online" />
+              <div className="flex flex-col gap-2">
+                <Avatar name="Amit Patel" size="md" status="offline" />
+                <Avatar name="Suresh K" size="sm" isVerified />
+              </div>
             </div>
           </div>
 
-          {/* Tooltip Showcase */}
-          <div className="space-y-4 text-center">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Info Tooltips</h3>
-            <div className="p-4 bg-card-bg rounded-card border border-border-main h-full flex items-center justify-center gap-8">
-              <Tooltip text="MSME Registered Business">
-                <div className="w-10 h-10 rounded-full bg-trust-teal/10 flex items-center justify-center text-trust-teal cursor-help">
-                  <Info size={20} />
-                </div>
-              </Tooltip>
-              <Tooltip text="Verified GST Account">
-                <Badge variant="teal" prefix="✓">Verified</Badge>
-              </Tooltip>
+          {/* Accordion Showcase */}
+          <div className="lg:col-span-2 space-y-4">
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Expandable Sections</h3>
+            <div className="space-y-3">
+              <Accordion title="What is Smart Escrow?">
+                Smart Escrow is a milestone-based payment locking system. Funds are only released when both buyer and supplier agree that a specific project milestone has been completed.
+              </Accordion>
+              <Accordion title="How does TrustScore work?">
+                TrustScore is calculated based on GST verification, PAN details, bank performance, and previous transaction history on TrustBiz.
+              </Accordion>
             </div>
           </div>
+        </div>
 
-          {/* Toast Triggers */}
-          <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Notifications</h3>
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="ghost" className="text-[10px] py-1.5" onClick={() => addToast('Update Saved!', 'success')}>Success</Button>
-              <Button variant="ghost" className="text-[10px] py-1.5" onClick={() => addToast('Action Failed!', 'error')}>Error</Button>
-              <Button variant="ghost" className="text-[10px] py-1.5" onClick={() => addToast('Low Stock Alert!', 'warning')}>Warning</Button>
-              <Button variant="ghost" className="text-[10px] py-1.5" onClick={() => addToast('Processing...', 'info')}>Info</Button>
+        {/* Divider Showcase */}
+        <div className="space-y-4">
+          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Layout Dividers</h3>
+          <div className="p-6 bg-card-bg rounded-card border border-border-main">
+            <p className="text-[13px] text-text-secondary text-center">Section Above</p>
+            <Divider label="Continue with" />
+            <div className="flex justify-center gap-4">
+              <Button variant="ghost">Google</Button>
+              <Button variant="ghost">MSME Portal</Button>
             </div>
           </div>
         </div>
       </section>
 
       {/* Previous Batches... */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-4">
-          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Advanced Selection</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <Dropdown 
-              label="Select Industry"
-              options={[{ label: 'Manufacturing', value: 'mfg' }, { label: 'Retail', value: 'retail' }]}
-            />
-            <div className="p-4 bg-card-bg rounded-card border border-border-main flex flex-col justify-center gap-4">
-              <Switch label="Email Alerts" checked={isNotificationsEnabled} onChange={setIsNotificationsEnabled} />
-            </div>
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="space-y-6">
+          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Step Wizard</h3>
+          <StepIndicator currentStep={2} steps={['Info', 'Verify', 'Type', 'Live']} />
+          <Alert variant="info" title="Optimization" message="All 35+ components are now optimized for performance." />
         </div>
         <div className="space-y-4">
-          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Rich Input</h3>
-          <TextArea placeholder="Add deal notes..." rows={4} />
+          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Interactive Feedback</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 bg-card-bg rounded-card border border-border-main flex flex-col justify-center gap-4">
+              <Checkbox label="Agree to terms" checked={isAgreed} onChange={setIsAgreed} />
+              <Switch label="Auto-Lock Funds" checked={isNotificationsEnabled} onChange={setIsNotificationsEnabled} />
+            </div>
+            <FileUploader />
+          </div>
         </div>
       </div>
 
       <UrgentActionPanel 
         title="Action Required: 2 Risky Suppliers Detected"
-        description="Rajesh Auto Parts and Mehta Pharma have shown suspicious activity."
+        description="Review Rajesh Auto Parts and Mehta Pharma immediately."
         buttonText="Review Now"
       />
 
@@ -229,10 +234,10 @@ export default function Dashboard() {
             <Input label="GST Number" placeholder="27AABCR..." />
           </div>
           <TextArea label="Transaction Notes" placeholder="Add instructions..." rows={2} />
-          <Checkbox label="Confirm these terms are final" checked={isAgreed} onChange={setIsAgreed} />
+          <Checkbox label="I confirm these terms are final" checked={isAgreed} onChange={setIsAgreed} />
           <div className="pt-4 flex gap-3">
             <Button variant="ghost" fullWidth onClick={() => setIsModalOpen(false)}>Cancel</Button>
-            <Button variant="primary" fullWidth onClick={() => { addToast('Transaction Created!', 'success'); setIsModalOpen(false); }}>Lock in Escrow</Button>
+            <Button variant="primary" fullWidth onClick={() => { addToast('Transaction Locked!', 'success'); setIsModalOpen(false); }}>Lock in Escrow</Button>
           </div>
         </div>
       </Modal>
