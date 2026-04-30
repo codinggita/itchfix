@@ -36,7 +36,10 @@ import Toast from '../components/ui/Toast';
 import Avatar from '../components/ui/Avatar';
 import Accordion from '../components/ui/Accordion';
 import Divider from '../components/ui/Divider';
-import { Plus, Info } from 'lucide-react';
+import ActionMenu from '../components/ui/ActionMenu';
+import AmountDisplay from '../components/ui/AmountDisplay';
+import Pagination from '../components/ui/Pagination';
+import { Plus, Info, Edit, Trash2, ExternalLink } from 'lucide-react';
 
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,6 +48,7 @@ export default function Dashboard() {
   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true);
   const [isAgreed, setIsAgreed] = useState(false);
   const [toasts, setToasts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const addToast = (message, type) => {
     const id = Date.now();
@@ -82,6 +86,17 @@ export default function Dashboard() {
       accessor: 'status',
       render: (status) => <StatusPill status={status} />
     },
+    {
+      header: 'Actions',
+      accessor: 'id',
+      render: () => (
+        <ActionMenu actions={[
+          { label: 'View Details', icon: <ExternalLink size={14} />, onClick: () => addToast('Opening details...', 'info') },
+          { label: 'Edit Info', icon: <Edit size={14} />, onClick: () => addToast('Edit mode active', 'warning') },
+          { label: 'Delete', icon: <Trash2 size={14} />, variant: 'danger', onClick: () => addToast('Supplier removed', 'error') }
+        ]} />
+      )
+    }
   ];
 
   const data = [
@@ -126,88 +141,78 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {/* Batch 11 Components Preview Section */}
+      {/* Batch 12 Components Preview Section */}
       <section className="space-y-8 bg-card-bg/30 p-8 rounded-card border border-dashed border-border-main">
-        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 11 UI Preview</h2>
+        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 12 UI Preview</h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Avatar Showcase */}
+          {/* Amount Display Showcase */}
           <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">User Avatars</h3>
-            <div className="flex items-center gap-4 p-4 bg-card-bg rounded-card border border-border-main">
-              <Avatar name="Rahul Shah" size="xl" isVerified status="online" />
-              <div className="flex flex-col gap-2">
-                <Avatar name="Amit Patel" size="md" status="offline" />
-                <Avatar name="Suresh K" size="sm" isVerified />
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Financial Formatting</h3>
+            <div className="p-5 bg-card-bg rounded-card border border-border-main flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <span className="text-[11px] text-text-ghost uppercase font-bold">Total Balance</span>
+                <AmountDisplay value="12,40,000" size="lg" color="text-trust-teal" />
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[11px] text-text-ghost uppercase font-bold">Escrow Locked</span>
+                <AmountDisplay value="8,25,000" size="md" color="text-trust-amber" />
               </div>
             </div>
           </div>
 
-          {/* Accordion Showcase */}
-          <div className="lg:col-span-2 space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Expandable Sections</h3>
-            <div className="space-y-3">
-              <Accordion title="What is Smart Escrow?">
-                Smart Escrow is a milestone-based payment locking system. Funds are only released when both buyer and supplier agree that a specific project milestone has been completed.
-              </Accordion>
-              <Accordion title="How does TrustScore work?">
-                TrustScore is calculated based on GST verification, PAN details, bank performance, and previous transaction history on TrustBiz.
-              </Accordion>
+          {/* Action Menu Showcase */}
+          <div className="space-y-4">
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Contextual Actions</h3>
+            <div className="p-5 bg-card-bg rounded-card border border-border-main flex items-center justify-center gap-10">
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-[10px] text-text-ghost font-bold uppercase">Table Row</p>
+                <ActionMenu actions={[
+                  { label: 'View Profile', onClick: () => {} },
+                  { label: 'Contact', onClick: () => {} }
+                ]} />
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-[10px] text-text-ghost font-bold uppercase">Card Action</p>
+                <ActionMenu actions={[
+                  { label: 'Download', icon: <Plus size={14} />, onClick: () => {} },
+                  { label: 'Delete', variant: 'danger', onClick: () => {} }
+                ]} />
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Divider Showcase */}
-        <div className="space-y-4">
-          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Layout Dividers</h3>
-          <div className="p-6 bg-card-bg rounded-card border border-border-main">
-            <p className="text-[13px] text-text-secondary text-center">Section Above</p>
-            <Divider label="Continue with" />
-            <div className="flex justify-center gap-4">
-              <Button variant="ghost">Google</Button>
-              <Button variant="ghost">MSME Portal</Button>
+          {/* Pagination Showcase */}
+          <div className="space-y-4">
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Data Pagination</h3>
+            <div className="h-full flex items-end">
+              <div className="w-full">
+                <Pagination 
+                  currentPage={currentPage} 
+                  totalPages={3} 
+                  onPageChange={setCurrentPage} 
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Previous Batches... */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <div className="space-y-6">
-          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Step Wizard</h3>
-          <StepIndicator currentStep={2} steps={['Info', 'Verify', 'Type', 'Live']} />
-          <Alert variant="info" title="Optimization" message="All 35+ components are now optimized for performance." />
-        </div>
-        <div className="space-y-4">
-          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Interactive Feedback</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-card-bg rounded-card border border-border-main flex flex-col justify-center gap-4">
-              <Checkbox label="Agree to terms" checked={isAgreed} onChange={setIsAgreed} />
-              <Switch label="Auto-Lock Funds" checked={isNotificationsEnabled} onChange={setIsNotificationsEnabled} />
-            </div>
-            <FileUploader />
-          </div>
-        </div>
-      </div>
-
-      <UrgentActionPanel 
-        title="Action Required: 2 Risky Suppliers Detected"
-        description="Review Rajesh Auto Parts and Mehta Pharma immediately."
-        buttonText="Review Now"
-      />
-
+      {/* Previous Batches Section... */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <section className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-2 space-y-8">
           <ComplianceBarChart data={chartData} />
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-text-secondary">Recent Suppliers</h2>
               <SearchBar placeholder="Search suppliers..." width="280px" />
             </div>
-            <DataTable columns={columns} data={data} />
+            <div className="bg-card-bg border border-border-main rounded-card">
+              <DataTable columns={columns} data={data} />
+              <Pagination currentPage={1} totalPages={1} onPageChange={() => {}} />
+            </div>
           </div>
-        </section>
-
+        </div>
         <aside className="space-y-8">
           <section className="bg-[#0A1628] p-6 rounded-card border border-border-main">
             <h2 className="text-lg font-semibold text-text-secondary mb-6">AI Negotiation</h2>
