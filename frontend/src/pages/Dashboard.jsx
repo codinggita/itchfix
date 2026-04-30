@@ -23,12 +23,16 @@ import FilterPill from '../components/ui/FilterPill';
 import FileUploader from '../components/ui/FileUpload';
 import Skeleton, { SkeletonCard } from '../components/ui/Skeleton';
 import EmptyState from '../components/ui/EmptyState';
+import Alert from '../components/ui/Alert';
+import Tabs from '../components/ui/Tabs';
+import Breadcrumbs from '../components/ui/Breadcrumbs';
 import { Plus } from 'lucide-react';
 
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState('All');
   const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview');
 
   const chartData = [
     { month: 'Jan', value: 85 },
@@ -64,9 +68,13 @@ export default function Dashboard() {
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-12 pb-20">
       <header className="flex items-center justify-between">
-        <div>
+        <div className="space-y-1">
+          <Breadcrumbs items={[
+            { label: 'TrustBiz', path: '/' },
+            { label: 'Dashboard', path: '/dashboard' }
+          ]} />
           <h1 className="text-3xl font-bold font-display text-trust-teal">TrustBiz Dashboard</h1>
-          <p className="text-text-muted mt-2">Welcome back, Rahul Shah (MSME Verified)</p>
+          <p className="text-text-muted">Welcome back, Rahul Shah (MSME Verified)</p>
         </div>
         <div className="flex gap-4">
           <Button variant="ghost" onClick={() => setIsLoading(!isLoading)}>
@@ -78,44 +86,73 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {/* Batch 7 Components Preview Section */}
-      <section className="space-y-6 bg-card-bg/30 p-8 rounded-card border border-dashed border-border-main">
-        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 7 UI Preview</h2>
+      {/* Batch 8 Components Preview Section */}
+      <section className="space-y-8 bg-card-bg/30 p-8 rounded-card border border-dashed border-border-main">
+        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 8 UI Preview</h2>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* File Upload */}
-          <div className="lg:col-span-2 space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">File Uploader (KYC)</h3>
-            <FileUploader label="Upload MSME Certificate" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          {/* Tabs & Alerts */}
+          <div className="space-y-6">
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Tab Navigation & Feedback</h3>
+            <Tabs 
+              items={[
+                { label: 'Overview', id: 'overview' },
+                { label: 'Suppliers', id: 'suppliers' },
+                { label: 'Escrow', id: 'escrow' }
+              ]} 
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+            />
+            <div className="space-y-4 pt-2">
+              <Alert 
+                variant="success" 
+                title="Payment Released" 
+                message="₹2.25L successfully released for Textile Bulk Order." 
+              />
+              <Alert 
+                variant="warning" 
+                title="KYC Update Required" 
+                message="Your GST certificate expires in 12 days. Please update soon." 
+              />
+            </div>
           </div>
 
-          {/* Skeleton Loader Showcase */}
-          <div className="space-y-4">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Skeleton Loading</h3>
-            {isLoading ? (
-              <SkeletonCard />
-            ) : (
-              <div className="p-5 bg-card-bg border border-border-main rounded-card text-center">
-                <p className="text-text-muted text-[13px] py-10">Click "Test Skeleton" to see loading state</p>
-              </div>
-            )}
+          {/* Additional Alerts */}
+          <div className="space-y-6 pt-10">
+            <Alert 
+              variant="danger" 
+              title="Dispute Alert" 
+              message="New dispute raised by PixelCraft Studio for Website Redesign." 
+            />
+            <Alert 
+              variant="info" 
+              title="System Notice" 
+              message="Scheduled maintenance on May 5th, 2:00 AM to 4:00 AM." 
+            />
           </div>
-        </div>
-
-        {/* Empty State Showcase */}
-        <div className="space-y-4">
-          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Empty State (Table/List)</h3>
-          <EmptyState 
-            title="No Pending Disputes" 
-            description="All your transactions are currently in order. New disputes will appear here." 
-            actionText="Refresh Feed"
-          />
         </div>
       </section>
 
-      {/* Previous Batches Section... */}
+      {/* Previous Batches... */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-2 space-y-4">
+          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">File Uploader (Batch 7)</h3>
+          <FileUploader label="Upload MSME Certificate" />
+        </div>
+        <div className="space-y-4">
+          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Skeleton (Batch 7)</h3>
+          {isLoading ? <SkeletonCard /> : <div className="p-5 bg-card-bg border border-border-main rounded-card text-center py-10 text-text-muted text-[13px]">Test Skeleton</div>}
+        </div>
+      </div>
+
+      <UrgentActionPanel 
+        title="Action Required: 2 Risky Suppliers Detected"
+        description="Rajesh Auto Parts and Mehta Pharma have shown suspicious activity."
+        buttonText="Review Now"
+      />
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <section className="lg:col-span-2 space-y-8">
           <ComplianceBarChart data={chartData} />
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -124,7 +161,8 @@ export default function Dashboard() {
             </div>
             <DataTable columns={columns} data={data} />
           </div>
-        </div>
+        </section>
+
         <aside className="space-y-8">
           <section className="bg-[#0A1628] p-6 rounded-card border border-border-main">
             <h2 className="text-lg font-semibold text-text-secondary mb-6">AI Negotiation</h2>
