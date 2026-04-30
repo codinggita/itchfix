@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import MetricCard from '../components/ui/MetricCard';
 import StatusPill from '../components/ui/StatusPill';
 import TrustScoreRing from '../components/ui/TrustScoreRing';
@@ -26,13 +27,31 @@ import EmptyState from '../components/ui/EmptyState';
 import Alert from '../components/ui/Alert';
 import Tabs from '../components/ui/Tabs';
 import Breadcrumbs from '../components/ui/Breadcrumbs';
-import { Plus } from 'lucide-react';
+import Dropdown from '../components/ui/Dropdown';
+import Switch from '../components/ui/Switch';
+import TextArea from '../components/ui/TextArea';
+import Checkbox from '../components/ui/Checkbox';
+import Tooltip from '../components/ui/Tooltip';
+import Toast from '../components/ui/Toast';
+import { Plus, Info } from 'lucide-react';
 
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeFilter, setActiveFilter] = useState('All');
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true);
+  const [isAgreed, setIsAgreed] = useState(false);
+  const [toasts, setToasts] = useState([]);
+
+  const addToast = (message, type) => {
+    const id = Date.now();
+    setToasts([...toasts, { id, message, type }]);
+    setTimeout(() => removeToast(id), 5000);
+  };
+
+  const removeToast = (id) => {
+    setToasts(currentToasts => currentToasts.filter(t => t.id !== id));
+  };
 
   const chartData = [
     { month: 'Jan', value: 85 },
@@ -48,7 +67,11 @@ export default function Dashboard() {
     { 
       header: 'TrustScore', 
       accessor: 'score',
-      render: (score) => <TrustScoreRing score={score} size={40} />
+      render: (score) => (
+        <Tooltip text={`Score: ${score}/100`}>
+          <TrustScoreRing score={score} size={40} />
+        </Tooltip>
+      )
     },
     { header: 'GST Number', accessor: 'gst' },
     { 
@@ -66,7 +89,21 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-12 pb-20">
+    <div className="p-8 max-w-7xl mx-auto space-y-12 pb-20 relative">
+      {/* Toast Container */}
+      <div className="fixed top-8 right-8 z-[200] space-y-4">
+        <AnimatePresence>
+          {toasts.map((toast) => (
+            <Toast 
+              key={toast.id} 
+              message={toast.message} 
+              type={toast.type} 
+              onClose={() => removeToast(toast.id)} 
+            />
+          ))}
+        </AnimatePresence>
+      </div>
+
       <header className="flex items-center justify-between">
         <div className="space-y-1">
           <Breadcrumbs items={[
@@ -77,8 +114,8 @@ export default function Dashboard() {
           <p className="text-text-muted">Welcome back, Rahul Shah (MSME Verified)</p>
         </div>
         <div className="flex gap-4">
-          <Button variant="ghost" onClick={() => setIsLoading(!isLoading)}>
-            {isLoading ? 'Stop Loading' : 'Test Skeleton'}
+          <Button variant="ghost" onClick={() => addToast('This is a test notification!', 'info')}>
+            Test Toast
           </Button>
           <Button variant="primary" onClick={() => setIsModalOpen(true)}>
             <Plus size={16} /> New Transaction
@@ -86,49 +123,44 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {/* Batch 8 Components Preview Section */}
+      {/* Batch 10 Components Preview Section */}
       <section className="space-y-8 bg-card-bg/30 p-8 rounded-card border border-dashed border-border-main">
-        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 8 UI Preview</h2>
+        <h2 className="text-xl font-bold text-text-secondary uppercase tracking-widest text-center">Batch 10 UI Preview</h2>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Tabs & Alerts */}
-          <div className="space-y-6">
-            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Tab Navigation & Feedback</h3>
-            <Tabs 
-              items={[
-                { label: 'Overview', id: 'overview' },
-                { label: 'Suppliers', id: 'suppliers' },
-                { label: 'Escrow', id: 'escrow' }
-              ]} 
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-            />
-            <div className="space-y-4 pt-2">
-              <Alert 
-                variant="success" 
-                title="Payment Released" 
-                message="₹2.25L successfully released for Textile Bulk Order." 
-              />
-              <Alert 
-                variant="warning" 
-                title="KYC Update Required" 
-                message="Your GST certificate expires in 12 days. Please update soon." 
-              />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Checkbox Showcase */}
+          <div className="space-y-4">
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Form Selection</h3>
+            <div className="p-4 bg-card-bg rounded-card border border-border-main space-y-4">
+              <Checkbox label="Agree to terms" checked={isAgreed} onChange={setIsAgreed} />
+              <Checkbox label="Enable Escrow" checked={true} onChange={() => {}} />
             </div>
           </div>
 
-          {/* Additional Alerts */}
-          <div className="space-y-6 pt-10">
-            <Alert 
-              variant="danger" 
-              title="Dispute Alert" 
-              message="New dispute raised by PixelCraft Studio for Website Redesign." 
-            />
-            <Alert 
-              variant="info" 
-              title="System Notice" 
-              message="Scheduled maintenance on May 5th, 2:00 AM to 4:00 AM." 
-            />
+          {/* Tooltip Showcase */}
+          <div className="space-y-4 text-center">
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Info Tooltips</h3>
+            <div className="p-4 bg-card-bg rounded-card border border-border-main h-full flex items-center justify-center gap-8">
+              <Tooltip text="MSME Registered Business">
+                <div className="w-10 h-10 rounded-full bg-trust-teal/10 flex items-center justify-center text-trust-teal cursor-help">
+                  <Info size={20} />
+                </div>
+              </Tooltip>
+              <Tooltip text="Verified GST Account">
+                <Badge variant="teal" prefix="✓">Verified</Badge>
+              </Tooltip>
+            </div>
+          </div>
+
+          {/* Toast Triggers */}
+          <div className="space-y-4">
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Notifications</h3>
+            <div className="grid grid-cols-2 gap-2">
+              <Button variant="ghost" className="text-[10px] py-1.5" onClick={() => addToast('Update Saved!', 'success')}>Success</Button>
+              <Button variant="ghost" className="text-[10px] py-1.5" onClick={() => addToast('Action Failed!', 'error')}>Error</Button>
+              <Button variant="ghost" className="text-[10px] py-1.5" onClick={() => addToast('Low Stock Alert!', 'warning')}>Warning</Button>
+              <Button variant="ghost" className="text-[10px] py-1.5" onClick={() => addToast('Processing...', 'info')}>Info</Button>
+            </div>
           </div>
         </div>
       </section>
@@ -136,12 +168,20 @@ export default function Dashboard() {
       {/* Previous Batches... */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
-          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">File Uploader (Batch 7)</h3>
-          <FileUploader label="Upload MSME Certificate" />
+          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Advanced Selection</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <Dropdown 
+              label="Select Industry"
+              options={[{ label: 'Manufacturing', value: 'mfg' }, { label: 'Retail', value: 'retail' }]}
+            />
+            <div className="p-4 bg-card-bg rounded-card border border-border-main flex flex-col justify-center gap-4">
+              <Switch label="Email Alerts" checked={isNotificationsEnabled} onChange={setIsNotificationsEnabled} />
+            </div>
+          </div>
         </div>
         <div className="space-y-4">
-          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Skeleton (Batch 7)</h3>
-          {isLoading ? <SkeletonCard /> : <div className="p-5 bg-card-bg border border-border-main rounded-card text-center py-10 text-text-muted text-[13px]">Test Skeleton</div>}
+          <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider">Rich Input</h3>
+          <TextArea placeholder="Add deal notes..." rows={4} />
         </div>
       </div>
 
@@ -183,14 +223,16 @@ export default function Dashboard() {
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create New Transaction">
         <div className="space-y-6">
-          <Input label="Supplier Name" placeholder="Search suppliers..." />
+          <Dropdown label="Select Supplier" options={data.map(d => ({ label: d.name, value: d.gst }))} />
           <div className="grid grid-cols-2 gap-4">
             <Input label="Amount" placeholder="₹ 0.00" />
-            <Input label="GST (Optional)" placeholder="27AABCR..." />
+            <Input label="GST Number" placeholder="27AABCR..." />
           </div>
+          <TextArea label="Transaction Notes" placeholder="Add instructions..." rows={2} />
+          <Checkbox label="Confirm these terms are final" checked={isAgreed} onChange={setIsAgreed} />
           <div className="pt-4 flex gap-3">
             <Button variant="ghost" fullWidth onClick={() => setIsModalOpen(false)}>Cancel</Button>
-            <Button variant="primary" fullWidth>Lock in Escrow</Button>
+            <Button variant="primary" fullWidth onClick={() => { addToast('Transaction Created!', 'success'); setIsModalOpen(false); }}>Lock in Escrow</Button>
           </div>
         </div>
       </Modal>
