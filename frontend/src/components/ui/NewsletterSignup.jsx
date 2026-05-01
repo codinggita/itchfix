@@ -1,39 +1,53 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { Mail, ArrowRight, ShieldCheck } from 'lucide-react';
+import Button from './Button';
 
 const NewsletterSignup = () => {
   return (
-    <div className="bg-indigo-700">
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
-        <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-          <span className="block">Ready to dive in?</span>
-          <span className="block text-indigo-200">Start your free trial today.</span>
-        </h2>
-        <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
-          <form className="sm:flex">
-            <label htmlFor="email-address" className="sr-only">
-              Email address
-            </label>
-            <input
-              id="email-address"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              className="w-full px-5 py-3 border border-transparent placeholder-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-indigo-700 focus:ring-white focus:border-white sm:max-w-xs rounded-md"
-              placeholder="Enter your email"
+    <section className="py-24 relative overflow-hidden">
+      <div className="absolute inset-0 bg-trust-teal/5 -z-10" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-trust-teal/10 blur-[120px] rounded-full -z-10" />
+
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="bg-card-bg border border-border-main rounded-[2rem] p-8 md:p-16 text-center space-y-8 relative overflow-hidden shadow-2xl shadow-trust-teal/10">
+          {/* Decor Icon */}
+          <div className="w-16 h-16 rounded-2xl bg-trust-teal/10 text-trust-teal flex items-center justify-center mx-auto mb-4 rotate-3 group-hover:rotate-0 transition-transform">
+            <Mail size={32} />
+          </div>
+
+          <div className="space-y-4 max-w-2xl mx-auto">
+            <h3 className="text-4xl font-display font-bold text-text-primary">Stay Ahead in <span className="text-trust-teal">B2B Trading</span></h3>
+            <p className="text-text-muted">Get weekly insights on Indian market trends, compliance updates, and verified supplier lists directly in your inbox.</p>
+          </div>
+
+          <div className="max-w-md mx-auto relative group">
+            <input 
+              type="email" 
+              placeholder="Enter your business email" 
+              className="w-full bg-page-bg border border-border-main rounded-full py-4 pl-6 pr-36 text-sm focus:outline-none focus:border-trust-teal/50 transition-all placeholder:text-text-ghost"
             />
-            <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3 sm:flex-shrink-0">
-              <button
-                type="submit"
-                className="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-indigo-700 focus:ring-white"
-              >
-                Notify me
-              </button>
+            <div className="absolute right-1.5 top-1.5">
+              <Button variant="primary" size="sm" className="rounded-full px-6 h-11">
+                Subscribe <ArrowRight size={16} className="ml-2" />
+              </Button>
             </div>
-          </form>
+          </div>
+
+          <div className="flex items-center justify-center gap-6 pt-4">
+            <div className="flex items-center gap-2 text-[10px] font-bold text-text-ghost uppercase tracking-widest">
+              <ShieldCheck size={14} className="text-trust-teal" />
+              No Spam
+            </div>
+            <div className="w-1 h-1 bg-border-main rounded-full" />
+            <div className="flex items-center gap-2 text-[10px] font-bold text-text-ghost uppercase tracking-widest">
+              <ShieldCheck size={14} className="text-trust-teal" />
+              Unsubscribe anytime
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
