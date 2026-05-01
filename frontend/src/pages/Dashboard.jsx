@@ -60,7 +60,10 @@ import TrustFactorItem from '../components/ui/TrustFactorItem';
 import ChatWindow from '../components/ui/ChatWindow';
 import ActivityLog from '../components/ui/ActivityLog';
 import InvoiceSummary from '../components/ui/InvoiceSummary';
-import { Plus, Info, Edit, Trash2, ExternalLink, Factory, Store, ShieldCheck, CreditCard, MessageSquare, Briefcase, Zap, Database, AlertTriangle, ShieldAlert, FileText, History } from 'lucide-react';
+import SearchHistory from '../components/ui/SearchHistory';
+import FeedbackForm from '../components/ui/FeedbackForm';
+import HelpCenterCard from '../components/ui/HelpCenterCard';
+import { Plus, Info, Edit, Trash2, ExternalLink, Factory, Store, ShieldCheck, CreditCard, MessageSquare, Briefcase, Zap, Database, AlertTriangle, ShieldAlert, FileText, History, Star, HelpCircle } from 'lucide-react';
 
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -135,8 +138,57 @@ export default function Dashboard() {
         </Button>
       </header>
 
+      {/* Batch 22 Components Preview Section */}
+      <section className="space-y-8 bg-card-bg/30 p-8 rounded-card border border-dashed border-trust-teal/70 shadow-2xl shadow-trust-teal/15">
+        <div className="flex items-center justify-between border-b border-border-main pb-6">
+          <div className="space-y-1">
+            <h2 className="text-xl font-bold text-trust-teal uppercase tracking-widest">Batch 22 UI Preview</h2>
+            <p className="text-[11px] text-text-muted font-mono">LIBRARY COMPLETE • FINAL COMPONENTS</p>
+          </div>
+          <Badge variant="success" className="animate-bounce">Library Ready</Badge>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* 1. Feedback Form */}
+          <div className="lg:col-span-4 space-y-4">
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
+              <Star size={14} className="text-trust-teal" /> 1. Transaction Feedback
+            </h3>
+            <FeedbackForm 
+              transactionId="TXN-9021"
+              supplierName="Reliance Textiles"
+              onSubmit={(data) => addToast(`Review Submitted: ${data.rating} Stars`, 'success')}
+            />
+          </div>
+
+          {/* 2. Search History & Help Center */}
+          <div className="lg:col-span-8 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
+                  <History size={14} className="text-trust-teal" /> 2. Search History
+                </h3>
+                <SearchHistory 
+                  items={[
+                    { id: 1, query: 'Cotton Yarn 60s', category: 'Textiles', timestamp: '2h ago' },
+                    { id: 2, query: 'Tata Steel CR Sheets', category: 'Metals', timestamp: 'Yesterday' },
+                    { id: 3, query: 'Industrial Lubricants', category: 'Chemicals', timestamp: '3 days ago' },
+                  ]}
+                />
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
+                  <HelpCircle size={14} className="text-trust-teal" /> 3. Support & Help
+                </h3>
+                <HelpCenterCard />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Batch 21 Components Preview Section */}
-      <section className="space-y-8 bg-card-bg/30 p-8 rounded-card border border-dashed border-trust-teal/60 shadow-2xl shadow-trust-teal/10">
+      <section className="space-y-8 bg-card-bg/30 p-8 rounded-card border border-dashed border-trust-teal/60 opacity-60">
         <div className="flex items-center justify-between border-b border-border-main pb-6">
           <div className="space-y-1">
             <h2 className="text-xl font-bold text-trust-teal uppercase tracking-widest">Batch 21 UI Preview</h2>
