@@ -57,7 +57,10 @@ import IntegrationCard from '../components/ui/IntegrationCard';
 import DisputeCard from '../components/ui/DisputeCard';
 import GSTInfoCard from '../components/ui/GSTInfoCard';
 import TrustFactorItem from '../components/ui/TrustFactorItem';
-import { Plus, Info, Edit, Trash2, ExternalLink, Factory, Store, ShieldCheck, CreditCard, MessageSquare, Briefcase, Zap, Database, AlertTriangle, ShieldAlert } from 'lucide-react';
+import ChatWindow from '../components/ui/ChatWindow';
+import ActivityLog from '../components/ui/ActivityLog';
+import InvoiceSummary from '../components/ui/InvoiceSummary';
+import { Plus, Info, Edit, Trash2, ExternalLink, Factory, Store, ShieldCheck, CreditCard, MessageSquare, Briefcase, Zap, Database, AlertTriangle, ShieldAlert, FileText, History } from 'lucide-react';
 
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -132,8 +135,67 @@ export default function Dashboard() {
         </Button>
       </header>
 
+      {/* Batch 21 Components Preview Section */}
+      <section className="space-y-8 bg-card-bg/30 p-8 rounded-card border border-dashed border-trust-teal/60 shadow-2xl shadow-trust-teal/10">
+        <div className="flex items-center justify-between border-b border-border-main pb-6">
+          <div className="space-y-1">
+            <h2 className="text-xl font-bold text-trust-teal uppercase tracking-widest">Batch 21 UI Preview</h2>
+            <p className="text-[11px] text-text-muted font-mono">NEGOTIATION & AUDIT LOGS</p>
+          </div>
+          <Badge variant="success" className="animate-pulse">Finalizing Library</Badge>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* 1. Chat Window */}
+          <div className="lg:col-span-5 space-y-4">
+            <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
+              <MessageSquare size={14} className="text-trust-teal" /> 1. Negotiation Chat
+            </h3>
+            <ChatWindow 
+              recipientName="Reliance Textiles"
+              messages={[
+                { sender: 'them', text: 'Regarding Batch #102, the GST invoice is attached.', time: '10:15 AM' },
+                { sender: 'me', text: 'Checking now. Is the quality certificate included?', time: '10:18 AM' },
+                { sender: 'them', text: 'Yes, it is in the same PDF.', time: '10:20 AM' },
+              ]}
+            />
+          </div>
+
+          {/* 2. Activity Log & Invoice Summary */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="space-y-4">
+              <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
+                <History size={14} className="text-trust-teal" /> 2. Audit Trail
+              </h3>
+              <ActivityLog 
+                activities={[
+                  { type: 'verification', title: 'GST Verified', description: 'Reliance Textiles GSTIN 27AABCR... verified.', time: 'Today, 9:00 AM' },
+                  { type: 'payment', title: 'Payment Locked', description: '₹1,45,000 locked in escrow for Deal #9021.', time: 'Today, 10:45 AM', link: true },
+                  { type: 'document', title: 'Invoice Uploaded', description: 'Invoice #INV-2024-001 uploaded by supplier.', time: 'Yesterday', link: true, linkText: 'View Invoice' },
+                ]}
+              />
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-[12px] font-bold text-text-muted uppercase tracking-wider flex items-center gap-2">
+                <FileText size={14} className="text-trust-teal" /> 3. Invoice Summary
+              </h3>
+              <InvoiceSummary 
+                invoiceNo="INV-2024-001"
+                date="May 01, 2026"
+                dueDate="May 15, 2026"
+                amount="1,45,000.00"
+                gstAmount="26,100.00"
+                clientName="Tata Components Ltd"
+                status="pending"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Batch 20 Components Preview Section */}
-      <section className="space-y-8 bg-card-bg/30 p-8 rounded-card border border-dashed border-trust-red/40 shadow-2xl shadow-trust-red/5">
+      <section className="space-y-8 bg-card-bg/30 p-8 rounded-card border border-dashed border-trust-red/40 opacity-60">
         <div className="flex items-center justify-between border-b border-border-main pb-6">
           <div className="space-y-1">
             <h2 className="text-xl font-bold text-trust-red uppercase tracking-widest">Batch 20 UI Preview</h2>
