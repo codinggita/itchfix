@@ -6,6 +6,8 @@ import Dashboard from './pages/Dashboard';
 import LandingPage from './pages/LandingPage/LandingPage';
 import SupplierNetwork from './pages/SupplierNetwork/SupplierNetwork';
 import EscrowDashboard from './pages/Escrow/EscrowDashboard';
+import Negotiation from './pages/Negotiation/Negotiation';
+import Inventory from './pages/Inventory/Inventory';
 
 export default function App() {
   const location = useLocation();
@@ -27,6 +29,8 @@ export default function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/suppliers" element={<SupplierNetwork />} />
             <Route path="/escrow" element={<EscrowDashboard />} />
+            <Route path="/payment-terms" element={<Negotiation />} />
+            <Route path="/inventory" element={<Inventory />} />
             {/* Other routes can be added here as they are developed */}
             <Route path="*" element={<div className="p-10 text-text-muted">Page under development</div>} />
           </Routes>
