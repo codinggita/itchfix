@@ -10,24 +10,29 @@ import Negotiation from './pages/Negotiation/Negotiation';
 import Inventory from './pages/Inventory/Inventory';
 import KYCOnboarding from './pages/KYCOnboarding/KYCOnboarding';
 import Settings from './pages/Settings/Settings';
+import Auth from './pages/Auth/Auth';
 
 export default function App() {
   const location = useLocation();
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
   const isLandingPage = location.pathname === '/';
+  const noLayout = isAuthPage || isLandingPage;
 
   return (
     <div className="min-h-screen bg-page-bg text-text-primary flex">
-      {/* Show Sidebar only if NOT on Landing Page */}
-      {!isLandingPage && <Sidebar />}
+      {/* Show Sidebar only if NOT on Landing or Auth Page */}
+      {!noLayout && <Sidebar />}
 
       {/* Main Content Area */}
-      <div className={`flex-1 flex flex-col min-w-0 ${!isLandingPage ? 'ml-[220px]' : ''}`}>
-        {/* Show Navbar only if NOT on Landing Page (Landing Page will have its own Navbar) */}
-        {!isLandingPage && <Navbar />}
+      <div className={`flex-1 flex flex-col min-w-0 ${!noLayout ? 'ml-[220px]' : ''}`}>
+        {/* Show Navbar only if NOT on Landing or Auth Page */}
+        {!noLayout && <Navbar />}
         
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<Auth />} />
+            <Route path="/signup" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/suppliers" element={<SupplierNetwork />} />
             <Route path="/escrow" element={<EscrowDashboard />} />
