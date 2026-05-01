@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Globe, Twitter, Mail, MessageSquare, MapPin, Phone } from 'lucide-react';
+import { ShieldCheck, Globe, Mail, MessageSquare, MapPin, Phone, Info } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -19,7 +19,7 @@ const Footer = () => {
               India's first B2B marketplace designed to eliminate payment risks for MSMEs. We verify trust, so you can focus on growth.
             </p>
             <div className="flex items-center gap-4">
-              {[Globe, Twitter, Mail, MessageSquare].map((Icon, idx) => (
+              {[Globe, MessageSquare, Mail, Info].map((Icon, idx) => (
                 <a key={idx} href="#" className="w-9 h-9 rounded-full border border-border-main flex items-center justify-center text-text-ghost hover:text-trust-teal hover:border-trust-teal/30 transition-all">
                   <Icon size={18} />
                 </a>

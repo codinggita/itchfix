@@ -153,8 +153,10 @@ export default function LandingPage() {
         </section>
 
         <TestimonialSection />
-        <FAQSection />
-        <NewsletterSignup />
+        <div id="resources">
+          <FAQSection />
+          <NewsletterSignup />
+        </div>
       </main>
 
       <Footer />
