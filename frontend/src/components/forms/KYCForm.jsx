@@ -5,10 +5,22 @@ import Input from '../ui/Input';
 import Button from '../ui/Button';
 import FileUploader from '../ui/FileUpload';
 import StepIndicator from '../ui/StepIndicator';
+import Toast from '../ui/Toast';
 
 const KYCForm = ({ onComplete }) => {
   const [step, setStep] = useState(1);
+  const [toasts, setToasts] = useState([]);
   const steps = ['Business Details', 'Personal Info', 'Documents', 'Review'];
+
+  const addToast = (message, type = 'success') => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => removeToast(id), 4000);
+  };
+
+  const removeToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
 
   const [formData, setFormData] = useState({
     businessName: '',
@@ -24,8 +36,22 @@ const KYCForm = ({ onComplete }) => {
     }
   });
 
-  const nextStep = () => setStep(prev => Math.min(prev + 1, 4));
+  const nextStep = () => {
+    if (step === 1 && !formData.businessName) {
+      addToast('Please enter business name', 'warning');
+      return;
+    }
+    setStep(prev => Math.min(prev + 1, 4));
+  };
   const prevStep = () => setStep(prev => Math.max(prev - 1, 1));
+
+  const handleSubmit = () => {
+    addToast('Submitting your verification documents...', 'info');
+    setTimeout(() => {
+      addToast('KYC submitted successfully!', 'success');
+      setTimeout(onComplete, 1500);
+    }, 2000);
+  };
 
   const renderStep = () => {
     switch (step) {
@@ -102,10 +128,21 @@ const KYCForm = ({ onComplete }) => {
             exit={{ opacity: 0, x: -20 }}
             className="space-y-6"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FileUploader label="GST Certificate" onFileSelect={(file) => setFormData({...formData, documents: {...formData.documents, gst: file}})} />
-              <FileUploader label="Business PAN Card" onFileSelect={(file) => setFormData({...formData, documents: {...formData.documents, pan: file}})} />
-              <FileUploader label="Aadhaar Card (Front & Back)" onFileSelect={(file) => setFormData({...formData, documents: {...formData.documents, aadhaar: file}})} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              <FileUploader label="GST Certificate" onFileSelect={(file) => {
+                setFormData({...formData, documents: {...formData.documents, gst: file}});
+                addToast('GST Certificate uploaded!', 'success');
+              }} />
+              <FileUploader label="Business PAN Card" onFileSelect={(file) => {
+                setFormData({...formData, documents: {...formData.documents, pan: file}});
+                addToast('PAN Card uploaded!', 'success');
+              }} />
+              <div className="md:col-span-2">
+                <FileUploader label="Aadhaar Card (Front & Back)" onFileSelect={(file) => {
+                  setFormData({...formData, documents: {...formData.documents, aadhaar: file}});
+                  addToast('Aadhaar Card uploaded!', 'success');
+                }} />
+              </div>
             </div>
           </motion.div>
         );
@@ -114,26 +151,26 @@ const KYCForm = ({ onComplete }) => {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="space-y-8 text-center py-4"
+            className="space-y-6 md:space-y-8 text-center py-2 md:py-4"
           >
-            <div className="w-20 h-20 bg-trust-teal/10 rounded-full flex items-center justify-center mx-auto text-trust-teal">
-              <CheckCircle2 size={40} />
+            <div className="w-16 h-16 md:w-20 md:h-20 bg-trust-teal/10 rounded-full flex items-center justify-center mx-auto text-trust-teal">
+              <CheckCircle2 size={32} className="md:size-40" />
             </div>
-            <div className="space-y-2">
-              <h3 className="text-2xl font-bold font-display text-text-primary">Ready for Submission</h3>
-              <p className="text-text-muted text-sm max-w-sm mx-auto">
-                Please review all information before submitting. Once submitted, our compliance team will verify your details within 24 hours.
+            <div className="space-y-2 px-2">
+              <h3 className="text-xl md:text-2xl font-bold font-display text-text-primary">Ready for Submission</h3>
+              <p className="text-text-muted text-xs md:text-sm max-w-sm mx-auto">
+                Please review all information before submitting. Verification takes 24 hours.
               </p>
             </div>
-            <div className="bg-page-bg/50 border border-border-main rounded-xl p-6 text-left space-y-4">
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p className="text-text-ghost text-[10px] uppercase font-bold tracking-widest">Business</p>
-                  <p className="font-bold text-text-secondary">{formData.businessName || 'N/A'}</p>
+            <div className="bg-page-bg/50 border border-border-main rounded-xl p-4 md:p-6 text-left space-y-4 mx-2 md:mx-0">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div className="min-w-0">
+                  <p className="text-text-ghost text-[9px] md:text-[10px] uppercase font-bold tracking-widest">Business</p>
+                  <p className="font-bold text-text-secondary truncate">{formData.businessName || 'N/A'}</p>
                 </div>
-                <div>
-                  <p className="text-text-ghost text-[10px] uppercase font-bold tracking-widest">GSTIN</p>
-                  <p className="font-mono font-bold text-text-secondary">{formData.gstNumber || 'N/A'}</p>
+                <div className="min-w-0">
+                  <p className="text-text-ghost text-[9px] md:text-[10px] uppercase font-bold tracking-widest">GSTIN</p>
+                  <p className="font-mono font-bold text-text-secondary truncate">{formData.gstNumber || 'N/A'}</p>
                 </div>
               </div>
             </div>
@@ -145,13 +182,22 @@ const KYCForm = ({ onComplete }) => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-12">
+    <div className="w-full max-w-4xl mx-auto space-y-8 md:space-y-12 px-2 md:px-0">
+      {/* Toast Container */}
+      <div className="fixed top-24 right-6 z-[200] space-y-4">
+        <AnimatePresence>
+          {toasts.map((toast) => (
+            <Toast key={toast.id} message={toast.message} type={toast.type} onClose={() => removeToast(toast.id)} />
+          ))}
+        </AnimatePresence>
+      </div>
+
       <StepIndicator currentStep={step} steps={steps} />
 
-      <div className="bg-card-bg border border-border-main rounded-card p-8 min-h-[450px] flex flex-col justify-between shadow-2xl shadow-trust-teal/5">
+      <div className="bg-card-bg border border-border-main rounded-card p-5 md:p-8 min-h-[400px] md:min-h-[450px] flex flex-col justify-between shadow-2xl shadow-trust-teal/5">
         <div className="flex-1">
-          <div className="mb-8">
-            <h2 className="text-xl font-bold font-display text-text-primary uppercase tracking-widest">{steps[step-1]}</h2>
+          <div className="mb-6 md:mb-8">
+            <h2 className="text-lg md:text-xl font-bold font-display text-text-primary uppercase tracking-widest">{steps[step-1]}</h2>
             <div className="h-1 w-12 bg-trust-teal mt-2 rounded-full" />
           </div>
           <AnimatePresence mode="wait">
@@ -159,22 +205,22 @@ const KYCForm = ({ onComplete }) => {
           </AnimatePresence>
         </div>
 
-        <div className="flex items-center justify-between mt-12 pt-8 border-t border-border-main">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 md:mt-12 pt-6 md:pt-8 border-t border-border-main">
           <Button 
             variant="ghost" 
             onClick={prevStep} 
             disabled={step === 1}
-            className={step === 1 ? 'invisible' : ''}
+            className={`w-full sm:w-auto ${step === 1 ? 'invisible hidden sm:block' : ''}`}
           >
             <ArrowLeft size={16} className="mr-2" /> Previous Step
           </Button>
           
           {step < 4 ? (
-            <Button variant="primary" onClick={nextStep} className="px-10">
+            <Button variant="primary" onClick={nextStep} className="w-full sm:w-auto px-10">
               Next Step <ArrowRight size={16} className="ml-2" />
             </Button>
           ) : (
-            <Button variant="primary" onClick={onComplete} className="px-10">
+            <Button variant="primary" onClick={handleSubmit} className="w-full sm:w-auto px-10">
               Submit Verification <CheckCircle2 size={16} className="ml-2" />
             </Button>
           )}
