@@ -1,67 +1,67 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { Quote, Star } from 'lucide-react';
+import Avatar from './Avatar';
+
+const testimonials = [
+  {
+    name: 'Rajesh Khanna',
+    role: 'Founder, Khanna Textiles',
+    content: 'TrustBiz has completely changed how we deal with new buyers. The Escrow system gives us peace of mind knowing the payment is secured.',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop'
+  },
+  {
+    name: 'Anjali Sharma',
+    role: 'Procurement Head, AutoParts India',
+    content: 'The GST verification tool is a lifesaver. We saved over ₹12 Lakhs by identifying a non-compliant supplier before making the payment.',
+    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop'
+  },
+  {
+    name: 'Vikram Mehta',
+    role: 'CEO, Mehta Steel Corp',
+    content: 'The TrustScore helps us stand out. Since getting our MSME verification badge, we have seen a 40% increase in inquiries.',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop'
+  }
+];
 
 const TestimonialSection = () => {
   return (
-    <section className="bg-white overflow-hidden py-12 md:py-20 lg:py-24">
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <svg
-          className="absolute top-full right-full transform translate-x-1/3 -translate-y-1/4 lg:translate-x-1/2 xl:-translate-y-1/2"
-          width="404"
-          height="404"
-          fill="none"
-          viewBox="0 0 404 404"
-          role="img"
-          aria-labelledby="svg-itchfix-testimonial"
-        >
-          <title id="svg-itchfix-testimonial">Itchfix Testimonial Background</title>
-          <defs>
-            <pattern
-              id="ad119f34-7694-4c31-947f-5c9d249b21f3"
-              x="0"
-              y="0"
-              width="20"
-              height="20"
-              patternUnits="userSpaceOnUse"
+    <section className="py-24 bg-page-bg overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center space-y-4 mb-20">
+          <h2 className="text-[12px] font-bold text-trust-teal uppercase tracking-[0.3em]">Success Stories</h2>
+          <h3 className="text-4xl font-display font-bold text-text-primary">Trusted by India's <span className="text-trust-teal">Top SMEs</span></h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {testimonials.map((t, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              className="bg-card-bg border border-border-main rounded-card p-8 relative group"
             >
-              <rect x="0" y="0" width="4" height="4" className="text-gray-200" fill="currentColor" />
-            </pattern>
-          </defs>
-          <rect width="404" height="404" fill="url(#ad119f34-7694-4c31-947f-5c9d249b21f3)" />
-        </svg>
+              <Quote className="absolute top-6 right-6 text-trust-teal/10 group-hover:text-trust-teal/20 transition-colors" size={48} />
+              
+              <div className="flex gap-1 mb-6">
+                {[...Array(5)].map((_, i) => <Star key={i} size={14} className="fill-trust-amber text-trust-amber" />)}
+              </div>
 
-        <div className="relative">
-          <img
-            className="mx-auto h-8"
-            src="https://tailwindui.com/img/logos/workcation-logo-indigo-600-mark-gray-800-and-text.svg"
-            alt="Workcation"
-          />
-          <blockquote className="mt-10">
-            <div className="max-w-3xl mx-auto text-center text-2xl leading-9 font-medium text-gray-900">
-              <p>
-                &ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo expedita voluptas culpa sapiente alias molestiae. Numquam corrupti in laborum sed rerum et corporis.&rdquo;
+              <p className="text-text-secondary leading-relaxed mb-8 italic">
+                "{t.content}"
               </p>
-            </div>
-            <footer className="mt-8">
-              <div className="md:flex md:items-center md:justify-center">
-                <div className="md:flex-shrink-0">
-                  <img
-                    className="mx-auto h-10 w-10 rounded-full"
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
-                </div>
-                <div className="mt-3 text-center md:mt-0 md:ml-4 md:flex md:items-center">
-                  <div className="text-base font-medium text-gray-900">Judith Black</div>
 
-                  <svg className="hidden md:block mx-1 h-5 w-5 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M11 0h3L9 20H6l5-20z" />
-                  </svg>
-
-                  <div className="text-base font-medium text-gray-500">CEO, Workcation</div>
+              <div className="flex items-center gap-4">
+                <Avatar name={t.name} src={t.image} size="md" />
+                <div>
+                  <h4 className="font-bold text-text-primary text-sm">{t.name}</h4>
+                  <p className="text-[11px] text-text-muted uppercase font-bold tracking-wider">{t.role}</p>
                 </div>
               </div>
-            </footer>
-          </blockquote>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

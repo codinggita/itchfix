@@ -1,55 +1,81 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, HelpCircle } from 'lucide-react';
 
 const FAQItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="pt-6">
-      <dt className="text-lg">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
-          <span className="font-medium text-gray-900">{question}</span>
-          <span className="ml-6 h-7 flex items-center">
-            <svg
-              className={`${isOpen ? '-rotate-180' : 'rotate-0'} h-6 w-6 transform duration-300`}
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </span>
-        </button>
-      </dt>
-      {isOpen && (
-        <dd className="mt-2 pr-12">
-          <p className="text-base text-gray-500">{answer}</p>
-        </dd>
-      )}
+    <div className="border-b border-border-main last:border-0">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full py-6 flex items-center justify-between text-left group transition-all"
+      >
+        <span className="text-lg font-bold text-text-primary group-hover:text-trust-teal transition-colors pr-8">
+          {question}
+        </span>
+        <div className={`w-8 h-8 rounded-full border border-border-main flex items-center justify-center text-text-ghost transition-all duration-300 ${isOpen ? 'rotate-180 bg-trust-teal text-page-bg border-trust-teal' : ''}`}>
+          <ChevronDown size={18} />
+        </div>
+      </button>
+      
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <p className="pb-6 text-text-muted leading-relaxed">
+              {answer}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
-const FAQSection = ({ faqs }) => {
+const FAQSection = () => {
+  const faqs = [
+    {
+      question: "Is TrustBiz an RBI-regulated platform?",
+      answer: "TrustBiz partners with RBI-regulated Escrow-as-a-Service providers and scheduled commercial banks to ensure your funds are always in safe, regulated custody."
+    },
+    {
+      question: "How long does it take to verify a supplier?",
+      answer: "Basic GST and MSME verification happens in real-time (under 30 seconds). Advanced TrustScore analysis can take up to 24 hours as it analyzes multiple data points."
+    },
+    {
+      question: "What happens if I receive a damaged product?",
+      answer: "If you have used our Escrow system, you can raise a dispute immediately. The funds will remain locked while our mediation team reviews the quality certificates and evidence."
+    },
+    {
+      question: "Are there any hidden charges for Escrow?",
+      answer: "No. We charge a flat fee or a small percentage per transaction depending on your plan. All charges are shown upfront before you lock the deal."
+    }
+  ];
+
   return (
-    <div className="bg-gray-50">
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:py-16 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto divide-y-2 divide-gray-200">
-          <h2 className="text-center text-3xl font-extrabold text-gray-900 sm:text-4xl">
-            Frequently asked questions
-          </h2>
-          <dl className="mt-6 space-y-6 divide-y divide-gray-200">
-            {faqs.map((faq, index) => (
-              <FAQItem key={index} question={faq.question} answer={faq.answer} />
-            ))}
-          </dl>
+    <section className="py-24 bg-card-bg/30">
+      <div className="max-w-4xl mx-auto px-6">
+        <div className="text-center space-y-4 mb-16">
+          <div className="w-12 h-12 rounded-full bg-trust-teal/10 text-trust-teal flex items-center justify-center mx-auto">
+            <HelpCircle size={24} />
+          </div>
+          <h3 className="text-4xl font-display font-bold text-text-primary">Got <span className="text-trust-teal">Questions?</span></h3>
+          <p className="text-text-muted">Everything you need to know about India's first B2B Trust platform.</p>
+        </div>
+
+        <div className="bg-card-bg border border-border-main rounded-card p-4 md:p-8">
+          {faqs.map((faq, index) => (
+            <FAQItem key={index} question={faq.question} answer={faq.answer} />
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
