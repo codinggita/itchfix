@@ -5,17 +5,16 @@ import { Check, X } from 'lucide-react';
 
 /**
  * SupplierCard - Card component for the Supplier Network grid.
- * 
- * @param {Object} supplier - Supplier data (name, gst, score, verifiedFlags, status)
  */
-const SupplierCard = ({ supplier }) => {
-  const { name, gst, score, verifiedFlags = {}, status } = supplier;
-
+const SupplierCard = ({ name, gst, score, verifiedFlags = {}, status, onClick }) => {
   return (
-    <div className="bg-card-bg border border-border-main rounded-card p-5 flex flex-col gap-4 hover:border-trust-teal/30 transition-all duration-300 group">
+    <div 
+      className="bg-card-bg border border-border-main rounded-card p-5 flex flex-col gap-4 hover:border-trust-teal/30 transition-all duration-300 group cursor-pointer"
+      onClick={onClick}
+    >
       <div className="flex justify-between items-start">
         <div className="space-y-1">
-          <h3 className="text-text-primary font-dm-sans font-bold text-[15px] group-hover:text-trust-teal transition-colors">
+          <h3 className="text-text-primary font-dm-sans font-bold text-[15px] group-hover:text-trust-teal transition-colors truncate max-w-[140px]">
             {name}
           </h3>
           <p className="font-mono-financial text-[11px] text-text-muted tracking-wider">

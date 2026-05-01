@@ -40,4 +40,11 @@ export const RECENT_TRANSACTIONS = [
   },
 ];
 
-export const INTEGRATIONS = [];
+export const INTEGRATIONS = [
+  { id: 1, name: 'Razorpay', category: 'Payments', status: 'connected', description: 'Collect and reconcile UPI/Card payments automatically.' },
+  { id: 2, name: 'Tally Prime', category: 'Accounting', status: 'connected', description: 'Sync invoices and transactions with Tally ERP.' },
+  { id: 3, name: 'GSTN Portal', category: 'Compliance', status: 'connected', description: 'Direct verification of GSTIN and return filing status.' },
+  { id: 4, name: 'WhatsApp', category: 'Communication', status: 'available', description: 'Send automated transaction alerts to partners.' },
+  { id: 5, name: 'PhonePe', category: 'Payments', status: 'available', description: 'Unified UPI payments for your B2B customers.' },
+  { id: 6, name: 'Google Sheets', category: 'Utility', status: 'available', description: 'Export and sync data to your spreadsheets.' },
+];

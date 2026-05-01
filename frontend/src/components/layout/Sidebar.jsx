@@ -5,18 +5,24 @@ import {
   Users, 
   Lock, 
   MessageSquare, 
-  AlertTriangle, 
+  Package, 
   Settings,
-  User
+  User,
+  Layers,
+  ShieldCheck,
+  RefreshCw
 } from 'lucide-react';
 
 const Sidebar = () => {
   const navItems = [
     { name: 'Dashboard', icon: <LayoutDashboard size={18} />, path: '/dashboard' },
+    { name: 'Reconciliation', icon: <RefreshCw size={18} />, path: '/reconciliation' },
     { name: 'Suppliers', icon: <Users size={18} />, path: '/suppliers' },
     { name: 'Escrow', icon: <Lock size={18} />, path: '/escrow' },
-    { name: 'Payment Terms', icon: <MessageSquare size={18} />, path: '/payment-terms' },
-    { name: 'Stock Alerts', icon: <AlertTriangle size={18} />, path: '/stock-alerts' },
+    { name: 'Negotiation', icon: <MessageSquare size={18} />, path: '/payment-terms' },
+    { name: 'Inventory', icon: <Package size={18} />, path: '/inventory' },
+    { name: 'KYC', icon: <ShieldCheck size={18} />, path: '/kyc' },
+    { name: 'Integrations', icon: <Layers size={18} />, path: '/integrations' },
     { name: 'Settings', icon: <Settings size={18} />, path: '/settings' },
   ];
 
@@ -58,7 +64,7 @@ const Sidebar = () => {
       </nav>
 
       {/* User Profile Section */}
-      <div className="p-4 border-top border-border-main mt-auto">
+      <div className="p-4 border-t border-border-main mt-auto">
         <div className="bg-card-bg/50 rounded-[10px] p-3 flex items-center gap-3 border border-border-main/50">
           <div className="w-8 h-8 rounded-full bg-trust-teal/20 flex items-center justify-center text-trust-teal">
             <User size={16} />

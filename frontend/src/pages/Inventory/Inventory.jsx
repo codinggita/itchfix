@@ -19,9 +19,21 @@ import Badge from '../../components/ui/Badge';
 import Button from '../../components/ui/Button';
 import SearchBar from '../../components/ui/SearchBar';
 import FilterPill from '../../components/ui/FilterPill';
+import Toast from '../../components/ui/Toast';
 
 const Inventory = () => {
   const [activeTab, setActiveTab] = useState('All');
+  const [toasts, setToasts] = useState([]);
+
+  const addToast = (message, type = 'success') => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => removeToast(id), 4000);
+  };
+
+  const removeToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
 
   const metrics = [
     { label: 'Total Stock Value', value: '₹24.8L', trend: 'up', trendValue: '5.2%', icon: <Package size={20} /> },
@@ -40,8 +52,8 @@ const Inventory = () => {
 
   const columns = [
     { header: 'SKU ID', accessor: 'id', render: (id) => <span className="font-mono text-[11px] font-bold text-text-primary">{id}</span> },
-    { header: 'Product Name', accessor: 'name', render: (name) => <span className="font-bold text-sm text-text-primary">{name}</span> },
-    { header: 'Category', accessor: 'category', render: (cat) => <Badge variant="ghost" size="sm">{cat}</Badge> },
+    { header: 'Product Name', accessor: 'name', render: (name) => <span className="font-bold text-sm text-text-primary truncate max-w-[120px]">{name}</span> },
+    { header: 'Category', accessor: 'category', render: (cat) => <Badge variant="ghost" size="sm" className="hidden sm:inline-flex">{cat}</Badge> },
     { 
       header: 'Current Stock', 
       accessor: 'stock', 
@@ -49,9 +61,9 @@ const Inventory = () => {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className={`font-mono font-bold ${stock < row.minStock ? 'text-trust-red' : 'text-text-secondary'}`}>{stock}</span>
-            <span className="text-[10px] text-text-ghost uppercase">{row.unit}</span>
+            <span className="text-[9px] md:text-[10px] text-text-ghost uppercase">{row.unit}</span>
           </div>
-          <div className="h-1 w-20 bg-border-main rounded-full overflow-hidden">
+          <div className="h-1 w-16 md:w-20 bg-border-main rounded-full overflow-hidden">
             <div 
               className={`h-full rounded-full ${stock < row.minStock ? 'bg-trust-red' : 'bg-trust-teal'}`} 
               style={{ width: `${Math.min((stock / row.minStock) * 100, 100)}%` }}
@@ -60,25 +72,28 @@ const Inventory = () => {
         </div>
       ) 
     },
-    { header: 'Unit Price', accessor: 'price', render: (price) => <span className="font-mono font-bold text-text-primary">{price}</span> },
+    { header: 'Unit Price', accessor: 'price', render: (price) => <span className="font-mono font-bold text-text-primary text-xs md:text-sm">{price}</span> },
     { 
       header: 'Status', 
       accessor: 'status', 
       render: (status) => (
-        <Badge variant={status === 'low' ? 'danger' : status === 'risky' ? 'warning' : 'success'}>
-          {status === 'low' ? 'Low Stock' : status === 'risky' ? 'Reorder Soon' : 'In Stock'}
+        <Badge variant={status === 'low' ? 'danger' : status === 'risky' ? 'warning' : 'success'} className="whitespace-nowrap">
+          {status === 'low' ? 'Low Stock' : status === 'risky' ? 'Reorder' : 'In Stock'}
         </Badge>
       ) 
     },
     {
       header: 'Actions',
       accessor: 'id',
-      render: () => (
+      render: (id) => (
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="px-2 h-8">
+          <Button variant="ghost" size="sm" className="px-2 h-8" onClick={() => addToast(`Opening details for ${id}...`, 'info')}>
             <ArrowUpRight size={14} />
           </Button>
-          <button className="p-1.5 hover:bg-page-bg rounded-md text-text-ghost transition-colors">
+          <button 
+            className="p-1.5 hover:bg-page-bg rounded-md text-text-ghost transition-colors"
+            onClick={() => addToast('More options coming soon!', 'info')}
+          >
             <MoreVertical size={16} />
           </button>
         </div>
@@ -87,46 +102,57 @@ const Inventory = () => {
   ];
 
   return (
-    <div className="p-8 space-y-8 max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto">
+      {/* Toast Container */}
+      <div className="fixed top-24 right-6 z-[200] space-y-4">
+        <AnimatePresence>
+          {toasts.map((toast) => (
+            <Toast key={toast.id} message={toast.message} type={toast.type} onClose={() => removeToast(toast.id)} />
+          ))}
+        </AnimatePresence>
+      </div>
+
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="space-y-1">
           <Breadcrumbs items={[{ label: 'TrustBiz', path: '/' }, { label: 'Inventory', path: '/inventory' }]} />
-          <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight">Stock & Inventory</h1>
-          <p className="text-text-muted text-sm">Monitor stock levels and automate replenishment with smart alerts.</p>
+          <h1 className="text-2xl md:text-3xl font-bold font-display text-text-primary tracking-tight">Stock & Inventory</h1>
+          <p className="text-text-muted text-xs md:text-sm">Monitor stock levels and automate replenishment with smart alerts.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm">
+        <div className="flex flex-wrap items-center gap-3">
+          <Button variant="ghost" size="sm" className="flex-1 md:flex-none" onClick={() => addToast('Opening stock history...', 'info')}>
             <History size={16} className="mr-2" /> Stock History
           </Button>
-          <Button variant="primary" size="sm">
+          <Button variant="primary" size="sm" className="flex-1 md:flex-none" onClick={() => addToast('Opening add item wizard...', 'info')}>
             <Plus size={16} className="mr-2" /> Add New Item
           </Button>
         </div>
       </header>
 
       {/* Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {metrics.map((m, i) => (
-          <StatMetric key={i} {...m} />
-        ))}
+      <div className="overflow-x-auto no-scrollbar pb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 min-w-[600px] lg:min-w-0">
+          {metrics.map((m, i) => (
+            <StatMetric key={i} {...m} />
+          ))}
+        </div>
       </div>
 
       {/* Low Stock Urgent Alert */}
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-trust-red/5 border border-trust-red/20 rounded-card p-4 flex items-center justify-between"
+        className="bg-trust-red/5 border border-trust-red/20 rounded-card p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between gap-4"
       >
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-full bg-trust-red/10 text-trust-red flex items-center justify-center animate-pulse">
+          <div className="w-10 h-10 rounded-full bg-trust-red/10 text-trust-red flex items-center justify-center shrink-0 animate-pulse">
             <AlertTriangle size={20} />
           </div>
-          <div>
+          <div className="text-center sm:text-left">
             <h4 className="text-sm font-bold text-text-primary uppercase tracking-wider">Critical Stock Alert</h4>
-            <p className="text-xs text-text-muted">8 items are below minimum safety levels. Reorder immediately to avoid production delays.</p>
+            <p className="text-[11px] md:text-xs text-text-muted">8 items are below minimum safety levels. Reorder immediately.</p>
           </div>
         </div>
-        <Button variant="primary" size="sm" className="bg-trust-red hover:bg-trust-red/90 border-none">
+        <Button variant="primary" size="sm" className="w-full sm:w-auto bg-trust-red hover:bg-trust-red/90 border-none py-2" onClick={() => addToast('Bulk restock initiated!', 'success')}>
           Restock All Now
         </Button>
       </motion.div>
@@ -140,20 +166,25 @@ const Inventory = () => {
                 key={cat} 
                 label={cat} 
                 isActive={activeTab === cat} 
-                onClick={() => setActiveTab(cat)} 
+                onClick={() => {
+                  setActiveTab(cat);
+                  addToast(`Filtering by ${cat}...`, 'info');
+                }} 
               />
             ))}
           </div>
           <div className="flex items-center gap-3 w-full lg:w-auto">
-            <SearchBar placeholder="Search items by SKU or Name..." width="100%" className="lg:min-w-[300px]" />
-            <Button variant="outline" size="sm" className="px-3 border-border-main">
+            <SearchBar placeholder="Search items..." width="100%" className="lg:min-w-[300px]" />
+            <Button variant="outline" size="sm" className="px-3 border-border-main shrink-0" onClick={() => addToast('Opening filters...', 'info')}>
               <Filter size={16} />
             </Button>
           </div>
         </div>
 
-        <div className="bg-card-bg border border-border-main rounded-card overflow-hidden shadow-xl shadow-trust-teal/5">
-          <DataTable columns={columns} data={inventoryData} />
+        <div className="bg-card-bg border border-border-main rounded-card overflow-x-auto shadow-xl shadow-trust-teal/5">
+          <div className="min-w-[800px] lg:min-w-0">
+            <DataTable columns={columns} data={inventoryData} />
+          </div>
         </div>
       </section>
     </div>
