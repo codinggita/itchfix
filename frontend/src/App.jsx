@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Sidebar from './components/layout/Sidebar';
 import Navbar from './components/layout/Navbar';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard/Dashboard';
 import LandingPage from './pages/LandingPage/LandingPage';
 import SupplierNetwork from './pages/SupplierNetwork/SupplierNetwork';
 import EscrowDashboard from './pages/Escrow/EscrowDashboard';
@@ -11,12 +11,19 @@ import Inventory from './pages/Inventory/Inventory';
 import KYCOnboarding from './pages/KYCOnboarding/KYCOnboarding';
 import Settings from './pages/Settings/Settings';
 import Auth from './pages/Auth/Auth';
+import Reconciliation from './pages/Reconciliation/Reconciliation';
+import Integrations from './pages/Integrations/Integrations';
+import Pricing from './pages/Pricing/Pricing';
+import Resources from './pages/Resources/Resources';
 
 export default function App() {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
   const isLandingPage = location.pathname === '/';
-  const noLayout = isAuthPage || isLandingPage;
+  const isPricingPage = location.pathname === '/pricing';
+  const isResourcesPage = location.pathname === '/resources';
+  
+  const noLayout = isAuthPage || isLandingPage || isPricingPage || isResourcesPage;
 
   return (
     <div className="min-h-screen bg-page-bg text-text-primary flex">
@@ -40,6 +47,10 @@ export default function App() {
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/kyc" element={<KYCOnboarding />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/reconciliation" element={<Reconciliation />} />
+            <Route path="/integrations" element={<Integrations />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/resources" element={<Resources />} />
             {/* Other routes can be added here as they are developed */}
             <Route path="*" element={<div className="p-10 text-text-muted">Page under development</div>} />
           </Routes>
