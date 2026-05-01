@@ -17,9 +17,49 @@ import Breadcrumbs from '../../components/ui/Breadcrumbs';
 import Button from '../../components/ui/Button';
 import Badge from '../../components/ui/Badge';
 import SearchBar from '../../components/ui/SearchBar';
+import Toast from '../../components/ui/Toast';
 
 const Reconciliation = () => {
   const [matchingStatus, setMatchingStatus] = useState('pending');
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [toasts, setToasts] = useState([]);
+
+  const addToast = (message, type = 'success') => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => removeToast(id), 4000);
+  };
+
+  const removeToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  const handleSync = () => {
+    setIsSyncing(true);
+    addToast('Syncing with HDFC Bank & Razorpay...', 'info');
+    setTimeout(() => {
+      setIsSyncing(false);
+      addToast('Sync completed! 4 new transactions found.', 'success');
+    }, 2500);
+  };
+
+  const handleExport = () => {
+    addToast('Preparing your reconciliation report...', 'info');
+    setTimeout(() => {
+      addToast('Report downloaded successfully (PDF).', 'success');
+    }, 1500);
+  };
+
+  const handleMatch = (id) => {
+    addToast(`Successfully matched ${id} with corresponding invoice.`, 'success');
+  };
+
+  const handleAutoMatch = () => {
+    addToast('AI is matching transactions...', 'info');
+    setTimeout(() => {
+      addToast('Auto-matched 3 transactions perfectly!', 'success');
+    }, 2000);
+  };
 
   const transactions = [
     { id: 'TXN-001', bank: 'HDFC Bank', amount: '₹45,000', date: 'May 01, 2026', type: 'Inbound', status: 'pending' },
@@ -35,6 +75,20 @@ const Reconciliation = () => {
 
   return (
     <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto">
+      {/* Toast Container */}
+      <div className="fixed top-24 right-6 z-[200] space-y-4">
+        <AnimatePresence>
+          {toasts.map((toast) => (
+            <Toast 
+              key={toast.id}
+              message={toast.message}
+              type={toast.type}
+              onClose={() => removeToast(toast.id)}
+            />
+          ))}
+        </AnimatePresence>
+      </div>
+
       {/* Header */}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="space-y-1">
@@ -45,11 +99,18 @@ const Reconciliation = () => {
           <p className="text-text-muted text-xs md:text-sm">Automatically match bank settlements with your sales invoices.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <Button variant="ghost" size="sm" className="flex-1 md:flex-none">
+          <Button variant="ghost" size="sm" className="flex-1 md:flex-none" onClick={handleExport}>
             <FileText size={16} className="mr-2" /> Export
           </Button>
-          <Button variant="primary" size="sm" className="flex-1 md:flex-none">
-            <RefreshCw size={16} className="mr-2" /> Sync
+          <Button 
+            variant="primary" 
+            size="sm" 
+            className="flex-1 md:flex-none" 
+            onClick={handleSync}
+            disabled={isSyncing}
+          >
+            <RefreshCw size={16} className={`mr-2 ${isSyncing ? 'animate-spin' : ''}`} /> 
+            {isSyncing ? 'Syncing...' : 'Sync'}
           </Button>
         </div>
       </header>
@@ -87,18 +148,16 @@ const Reconciliation = () => {
 
       {/* Matching Canvas */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 relative">
-        {/* Connection Lines Decor (Static for now) */}
         <div className="absolute inset-0 pointer-events-none hidden lg:flex items-center justify-center">
           <div className="w-px h-full bg-gradient-to-b from-transparent via-border-main to-transparent" />
         </div>
 
-        {/* Left: Bank Statements */}
         <div className="space-y-4 md:space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-base md:text-lg font-display font-bold text-text-primary">Bank Statements</h2>
             <div className="flex gap-2">
-              <button className="text-[10px] font-bold text-text-ghost uppercase tracking-widest hover:text-text-muted">Latest</button>
-              <button className="text-[10px] font-bold text-text-ghost uppercase tracking-widest hover:text-text-muted">Filter</button>
+              <button className="text-[10px] font-bold text-text-ghost uppercase tracking-widest hover:text-text-muted" onClick={() => addToast('Filtering latest statements...', 'info')}>Latest</button>
+              <button className="text-[10px] font-bold text-text-ghost uppercase tracking-widest hover:text-text-muted" onClick={() => addToast('Opening filters...', 'info')}>Filter</button>
             </div>
           </div>
 
@@ -126,19 +185,18 @@ const Reconciliation = () => {
                 </div>
               </motion.div>
             ))}
-            <Button variant="outline" fullWidth size="sm" className="border-dashed border-border-main text-text-ghost hover:text-text-muted py-3">
+            <Button variant="outline" fullWidth size="sm" className="border-dashed border-border-main text-text-ghost hover:text-text-muted py-3" onClick={() => addToast('Upload modal coming soon!', 'warning')}>
               <Plus size={14} className="mr-2" /> Add Statement
             </Button>
           </div>
         </div>
 
-        {/* Right: Sales Invoices */}
         <div className="space-y-4 md:space-y-6 mt-4 lg:mt-0">
           <div className="flex justify-between items-center">
             <h2 className="text-base md:text-lg font-display font-bold text-text-primary">Sales Invoices</h2>
             <div className="flex gap-2">
-              <button className="text-[10px] font-bold text-text-ghost uppercase tracking-widest hover:text-text-muted">Unpaid</button>
-              <button className="text-[10px] font-bold text-text-ghost uppercase tracking-widest hover:text-text-muted">Search</button>
+              <button className="text-[10px] font-bold text-text-ghost uppercase tracking-widest hover:text-text-muted" onClick={() => addToast('Showing unpaid invoices...', 'info')}>Unpaid</button>
+              <button className="text-[10px] font-bold text-text-ghost uppercase tracking-widest hover:text-text-muted" onClick={() => addToast('Opening invoice search...', 'info')}>Search</button>
             </div>
           </div>
 
@@ -162,7 +220,10 @@ const Reconciliation = () => {
                 </div>
                 <div className="text-right shrink-0 ml-2">
                   <p className="text-sm font-mono font-bold text-text-primary">{inv.amount}</p>
-                  <button className="text-[8px] md:text-[9px] font-bold text-trust-teal uppercase hover:underline flex items-center gap-1 justify-end">
+                  <button 
+                    className="text-[8px] md:text-[9px] font-bold text-trust-teal uppercase hover:underline flex items-center gap-1 justify-end"
+                    onClick={() => handleMatch(inv.id)}
+                  >
                     <LinkIcon size={10} /> Match Now
                   </button>
                 </div>
@@ -183,7 +244,11 @@ const Reconciliation = () => {
             <p className="text-xs md:text-sm text-text-muted truncate">3 transactions perfectly match with invoices.</p>
           </div>
         </div>
-        <Button variant="primary" className="w-full sm:w-auto bg-trust-purple hover:bg-trust-purple/90 shadow-lg shadow-trust-purple/20 text-xs md:text-sm py-3 md:py-2">
+        <Button 
+          variant="primary" 
+          className="w-full sm:w-auto bg-trust-purple hover:bg-trust-purple/90 shadow-lg shadow-trust-purple/20 text-xs md:text-sm py-3 md:py-2"
+          onClick={handleAutoMatch}
+        >
           Auto-Match All <ArrowRight size={16} className="ml-2" />
         </Button>
       </section>
