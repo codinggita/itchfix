@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Filter, SlidersHorizontal, Plus, Grid, List, Download } from 'lucide-react';
+import { 
+  Filter, 
+  SlidersHorizontal, 
+  Plus, 
+  Grid, 
+  List, 
+  Download,
+  ShieldCheck,
+  Search,
+  MoreVertical,
+  ExternalLink
+} from 'lucide-react';
 import Breadcrumbs from '../../components/ui/Breadcrumbs';
 import SearchBar from '../../components/ui/SearchBar';
 import FilterPill from '../../components/ui/FilterPill';
 import SupplierCard from '../../components/ui/SupplierCard';
 import Button from '../../components/ui/Button';
 import Pagination from '../../components/ui/Pagination';
+import Toast from '../../components/ui/Toast';
 
 const suppliersData = [
   { id: 1, name: 'Reliance Textiles Pvt Ltd', gst: '24AABCR1234A1Z5', score: 94, status: 'verified', verifiedFlags: { gst: true, pan: true, bank: true }, category: 'Textiles' },
@@ -24,7 +36,18 @@ const categories = ['All', 'Textiles', 'Manufacturing', 'Retail', 'Automobile', 
 export default function SupplierNetwork() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
-  const [viewType, setViewType] = useState('grid'); // 'grid' or 'list'
+  const [viewType, setViewType] = useState('grid');
+  const [toasts, setToasts] = useState([]);
+
+  const addToast = (message, type = 'success') => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => removeToast(id), 4000);
+  };
+
+  const removeToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
 
   const filteredSuppliers = suppliersData.filter(supplier => {
     const matchesSearch = supplier.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -34,20 +57,29 @@ export default function SupplierNetwork() {
   });
 
   return (
-    <div className="p-8 space-y-8 max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto">
+      {/* Toast Container */}
+      <div className="fixed top-24 right-6 z-[200] space-y-4">
+        <AnimatePresence>
+          {toasts.map((toast) => (
+            <Toast key={toast.id} message={toast.message} type={toast.type} onClose={() => removeToast(toast.id)} />
+          ))}
+        </AnimatePresence>
+      </div>
+
       {/* Header */}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="space-y-1">
           <Breadcrumbs items={[{ label: 'TrustBiz', path: '/' }, { label: 'Supplier Network', path: '/suppliers' }]} />
-          <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight">Supplier Network</h1>
-          <p className="text-text-muted text-sm">Connect with verified Indian businesses and manufacturers.</p>
+          <h1 className="text-2xl md:text-3xl font-bold font-display text-text-primary tracking-tight">Supplier Network</h1>
+          <p className="text-text-muted text-xs md:text-sm">Connect with verified Indian businesses and manufacturers.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" className="hidden sm:flex">
-            <Download size={16} className="mr-2" /> Export List
+          <Button variant="ghost" size="sm" className="hidden sm:flex" onClick={() => addToast('Exporting supplier list...', 'info')}>
+            <Download size={16} className="mr-2" /> Export
           </Button>
-          <Button variant="primary" size="sm">
-            <Plus size={16} className="mr-2" /> Invite Supplier
+          <Button variant="primary" size="sm" className="flex-1 md:flex-none" onClick={() => addToast('Opening invite modal...', 'info')}>
+            <Plus size={16} className="mr-2" /> Invite
           </Button>
         </div>
       </header>
@@ -55,22 +87,19 @@ export default function SupplierNetwork() {
       {/* Toolbar */}
       <section className="bg-card-bg border border-border-main rounded-card p-4 flex flex-col lg:flex-row gap-4 items-center justify-between">
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-          <SearchBar 
-            placeholder="Search by name or GSTIN..." 
-            width="100%" 
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="sm:max-w-[320px]"
-          />
+          <div className="relative w-full sm:w-[320px]">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-ghost" />
+            <input 
+              type="text"
+              placeholder="Search name or GSTIN..."
+              className="w-full bg-input-bg border border-border-main rounded-radius-input py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-trust-teal/50"
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
           <div className="h-8 w-px bg-border-main hidden sm:block" />
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 sm:pb-0 w-full sm:w-auto">
-            <Filter size={14} className="text-text-ghost shrink-0" />
             {['Verified', 'Pending', 'High Score'].map(filter => (
-              <FilterPill 
-                key={filter} 
-                label={filter} 
-                isActive={false} 
-                onClick={() => {}}
-              />
+              <FilterPill key={filter} label={filter} isActive={false} onClick={() => addToast(`Filtering by ${filter}...`, 'info')} />
             ))}
           </div>
         </div>
@@ -90,8 +119,8 @@ export default function SupplierNetwork() {
               <List size={18} />
             </button>
           </div>
-          <Button variant="ghost" size="sm" className="text-text-muted">
-            <SlidersHorizontal size={16} className="mr-2" /> More Filters
+          <Button variant="ghost" size="sm" className="text-text-muted" onClick={() => addToast('Opening advanced filters...', 'info')}>
+            <SlidersHorizontal size={16} className="mr-2" /> Filters
           </Button>
         </div>
       </section>
@@ -99,61 +128,76 @@ export default function SupplierNetwork() {
       {/* Category Tabs */}
       <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-2">
         {categories.map(cat => (
-          <FilterPill 
-            key={cat} 
-            label={cat} 
-            isActive={activeCategory === cat} 
+          <button
+            key={cat}
             onClick={() => setActiveCategory(cat)}
-            count={cat === 'All' ? suppliersData.length : suppliersData.filter(s => s.category === cat).length}
-          />
+            className={`px-4 py-1.5 rounded-pill text-[11px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
+              activeCategory === cat 
+                ? 'bg-trust-teal/10 text-trust-teal border border-trust-teal/20' 
+                : 'text-text-ghost hover:text-text-muted border border-transparent'
+            }`}
+          >
+            {cat}
+          </button>
         ))}
       </div>
 
-      {/* Grid */}
-      <section>
-        <AnimatePresence mode="popLayout">
-          <motion.div 
-            layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-          >
-            {filteredSuppliers.map((supplier) => (
-              <motion.div
-                key={supplier.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.2 }}
-              >
-                <SupplierCard supplier={supplier} />
-              </motion.div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
+      {/* Content Grid/List */}
+      {viewType === 'grid' ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredSuppliers.map(supplier => (
+            <SupplierCard key={supplier.id} {...supplier} onClick={() => addToast(`Opening ${supplier.name}...`, 'info')} />
+          ))}
+        </div>
+      ) : (
+        <div className="bg-card-bg border border-border-main rounded-card overflow-hidden">
+          <table className="w-full text-left">
+            <thead className="bg-input-bg border-b border-border-main">
+              <tr>
+                <th className="px-6 py-4 text-[10px] font-bold text-text-ghost uppercase tracking-widest">Supplier</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-text-ghost uppercase tracking-widest hidden md:table-cell">GSTIN</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-text-ghost uppercase tracking-widest">TrustScore</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-text-ghost uppercase tracking-widest text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border-main">
+              {filteredSuppliers.map(s => (
+                <tr key={s.id} className="hover:bg-white/5 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="font-bold text-text-primary text-sm">{s.name}</div>
+                    <div className="text-[10px] text-text-muted uppercase font-bold">{s.category}</div>
+                  </td>
+                  <td className="px-6 py-4 hidden md:table-cell">
+                    <span className="font-mono text-xs text-text-secondary">{s.gst}</span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <Badge variant={s.score > 80 ? 'teal' : s.score > 50 ? 'amber' : 'red'}>{s.score}/100</Badge>
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <button className="text-trust-teal hover:underline text-xs font-bold uppercase tracking-widest" onClick={() => addToast(`Opening ${s.name}...`, 'info')}>View</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
-        {filteredSuppliers.length === 0 && (
-          <div className="py-20 text-center space-y-4">
-            <div className="w-20 h-20 bg-card-bg border border-border-main rounded-full flex items-center justify-center mx-auto text-text-ghost">
-              <Filter size={32} />
-            </div>
-            <div className="space-y-1">
-              <h3 className="text-lg font-bold text-text-primary">No suppliers found</h3>
-              <p className="text-text-muted text-sm">Try adjusting your search or category filters.</p>
-            </div>
-            <Button variant="outline" size="sm" onClick={() => { setSearchQuery(''); setActiveCategory('All'); }}>
-              Clear All Filters
-            </Button>
+      {/* Empty State */}
+      {filteredSuppliers.length === 0 && (
+        <div className="py-20 text-center space-y-4">
+          <div className="w-16 h-16 bg-card-bg border border-border-main rounded-2xl flex items-center justify-center mx-auto text-text-ghost">
+            <Search size={32} />
           </div>
-        )}
-      </section>
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-text-primary">No suppliers found</h3>
+            <p className="text-text-muted text-sm max-w-xs mx-auto">Try adjusting your filters or search terms.</p>
+          </div>
+          <Button variant="ghost" size="sm" onClick={() => {setSearchQuery(''); setActiveCategory('All');}}>Clear All</Button>
+        </div>
+      )}
 
-      {/* Footer / Pagination */}
-      <footer className="pt-8 border-t border-border-main flex flex-col sm:flex-row items-center justify-between gap-6">
-        <p className="text-xs text-text-ghost font-medium">
-          Showing <span className="text-text-secondary font-mono">{filteredSuppliers.length}</span> of <span className="text-text-secondary font-mono">{suppliersData.length}</span> suppliers
-        </p>
-        <Pagination currentPage={1} totalPages={5} onPageChange={() => {}} />
-      </footer>
+      <Pagination />
     </div>
   );
 }
