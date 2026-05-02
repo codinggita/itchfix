@@ -21,6 +21,7 @@ import Analytics from './pages/Analytics/Analytics';
 import Support from './pages/Support/Support';
 import Transactions from './pages/Transactions/Transactions';
 import Disputes from './pages/Disputes/Disputes';
+import Wallet from './pages/Wallet/Wallet';
 
 export default function App() {
   const location = useLocation();
@@ -63,6 +64,7 @@ export default function App() {
             <Route path="/support" element={<Support />} />
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/disputes" element={<Disputes />} />
+            <Route path="/wallet" element={<Wallet />} />
             {/* Other routes can be added here as they are developed */}
             <Route path="*" element={<div className="p-10 text-text-muted">Page under development</div>} />
           </Routes>
