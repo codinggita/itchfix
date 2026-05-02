@@ -19,6 +19,8 @@ import Notifications from './pages/Notifications/Notifications';
 import Profile from './pages/Profile/Profile';
 import Analytics from './pages/Analytics/Analytics';
 import Support from './pages/Support/Support';
+import Transactions from './pages/Transactions/Transactions';
+import Disputes from './pages/Disputes/Disputes';
 
 export default function App() {
   const location = useLocation();
@@ -59,6 +61,8 @@ export default function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/transactions" element={<Transactions />} />
+            <Route path="/disputes" element={<Disputes />} />
             {/* Other routes can be added here as they are developed */}
             <Route path="*" element={<div className="p-10 text-text-muted">Page under development</div>} />
           </Routes>
