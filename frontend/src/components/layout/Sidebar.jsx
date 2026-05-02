@@ -10,12 +10,14 @@ import {
   User,
   Layers,
   ShieldCheck,
-  RefreshCw
+  RefreshCw,
+  History
 } from 'lucide-react';
 
 const Sidebar = () => {
   const navItems = [
     { name: 'Dashboard', icon: <LayoutDashboard size={18} />, path: '/dashboard' },
+    { name: 'Transactions', icon: <History size={18} />, path: '/transactions' },
     { name: 'Reconciliation', icon: <RefreshCw size={18} />, path: '/reconciliation' },
     { name: 'Suppliers', icon: <Users size={18} />, path: '/suppliers' },
     { name: 'Escrow', icon: <Lock size={18} />, path: '/escrow' },
