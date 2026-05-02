@@ -11,7 +11,8 @@ import {
   Layers,
   ShieldCheck,
   RefreshCw,
-  History
+  History,
+  Scale
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -21,6 +22,7 @@ const Sidebar = () => {
     { name: 'Reconciliation', icon: <RefreshCw size={18} />, path: '/reconciliation' },
     { name: 'Suppliers', icon: <Users size={18} />, path: '/suppliers' },
     { name: 'Escrow', icon: <Lock size={18} />, path: '/escrow' },
+    { name: 'Disputes', icon: <Scale size={18} />, path: '/disputes' },
     { name: 'Negotiation', icon: <MessageSquare size={18} />, path: '/payment-terms' },
     { name: 'Inventory', icon: <Package size={18} />, path: '/inventory' },
     { name: 'KYC', icon: <ShieldCheck size={18} />, path: '/kyc' },
