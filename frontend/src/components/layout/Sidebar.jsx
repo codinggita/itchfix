@@ -13,12 +13,14 @@ import {
   RefreshCw,
   History,
   Scale,
-  Wallet
+  Wallet,
+  ShoppingBag
 } from 'lucide-react';
 
 const Sidebar = () => {
   const navItems = [
     { name: 'Dashboard', icon: <LayoutDashboard size={18} />, path: '/dashboard' },
+    { name: 'Marketplace', icon: <ShoppingBag size={18} />, path: '/marketplace' },
     { name: 'Wallet', icon: <Wallet size={18} />, path: '/wallet' },
     { name: 'Transactions', icon: <History size={18} />, path: '/transactions' },
     { name: 'Reconciliation', icon: <RefreshCw size={18} />, path: '/reconciliation' },
