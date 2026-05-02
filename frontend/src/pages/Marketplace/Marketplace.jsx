@@ -18,18 +18,28 @@ import Badge from '../../components/ui/Badge';
 import SearchBar from '../../components/ui/SearchBar';
 import Toast from '../../components/ui/Toast';
 
-const MarketplaceHeader = ({ onAction }) => (
-  <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-    <div className="space-y-1">
-      <Breadcrumbs items={[{ label: 'TrustBiz', path: '/' }, { label: 'B2B Marketplace', path: '/marketplace' }]} />
-      <h1 className="text-2xl md:text-3xl font-bold font-display text-text-primary tracking-tight">B2B Marketplace</h1>
-      <p className="text-text-muted text-xs md:text-sm">Discover verified raw materials and industrial supplies from trusted Indian manufacturers.</p>
-    </div>
-    <Button variant="primary" size="sm" onClick={() => onAction('Opening listing wizard...', 'info')}>
-      <Plus size={16} className="mr-2" /> List Product
-    </Button>
-  </header>
-);
+import { useNavigate } from 'react-router-dom';
+
+const MarketplaceHeader = ({ onAction }) => {
+  const navigate = useNavigate();
+  return (
+    <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div className="space-y-1">
+        <Breadcrumbs items={[{ label: 'TrustBiz', path: '/' }, { label: 'B2B Marketplace', path: '/marketplace' }]} />
+        <h1 className="text-2xl md:text-3xl font-bold font-display text-text-primary tracking-tight">B2B Marketplace</h1>
+        <p className="text-text-muted text-xs md:text-sm">Discover verified raw materials and industrial supplies from trusted Indian manufacturers.</p>
+      </div>
+      <div className="flex gap-3">
+        <Button variant="ghost" size="sm" onClick={() => navigate('/checkout')}>
+          <ShoppingBag size={16} className="mr-2" /> View Cart
+        </Button>
+        <Button variant="primary" size="sm" onClick={() => onAction('Opening listing wizard...', 'info')}>
+          <Plus size={16} className="mr-2" /> List Product
+        </Button>
+      </div>
+    </header>
+  );
+};
 
 const MarketplaceToolbar = ({ onAction, activeTab, setActiveTab }) => {
   const categories = ['All', 'Textiles', 'Metals', 'Chemicals', 'Electronics', 'Packaging'];
