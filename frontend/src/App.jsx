@@ -16,6 +16,9 @@ import Integrations from './pages/Integrations/Integrations';
 import Pricing from './pages/Pricing/Pricing';
 import Resources from './pages/Resources/Resources';
 import Notifications from './pages/Notifications/Notifications';
+import Profile from './pages/Profile/Profile';
+import Analytics from './pages/Analytics/Analytics';
+import Support from './pages/Support/Support';
 
 export default function App() {
   const location = useLocation();
@@ -53,6 +56,9 @@ export default function App() {
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/notifications" element={<Notifications />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/support" element={<Support />} />
             {/* Other routes can be added here as they are developed */}
             <Route path="*" element={<div className="p-10 text-text-muted">Page under development</div>} />
           </Routes>

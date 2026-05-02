@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Bell, Zap } from 'lucide-react';
+import { Search, Bell, Zap, HelpCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
@@ -34,6 +34,11 @@ const Navbar = () => {
           <span className="absolute top-1 right-1 w-3.5 h-3.5 bg-trust-red border-2 border-page-bg rounded-full flex items-center justify-center text-[8px] font-bold text-white">
             3
           </span>
+        </Link>
+
+        {/* Support Help Icon */}
+        <Link to="/support" className="p-1.5 text-text-muted hover:text-text-secondary transition-colors">
+          <HelpCircle size={18} />
         </Link>
       </div>
     </header>
