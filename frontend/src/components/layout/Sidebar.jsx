@@ -14,7 +14,8 @@ import {
   History,
   Scale,
   Wallet,
-  ShoppingBag
+  ShoppingBag,
+  Bell
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -29,6 +30,7 @@ const Sidebar = () => {
     { name: 'Disputes', icon: <Scale size={18} />, path: '/disputes' },
     { name: 'Negotiation', icon: <MessageSquare size={18} />, path: '/payment-terms' },
     { name: 'Inventory', icon: <Package size={18} />, path: '/inventory' },
+    { name: 'Notifications', icon: <Bell size={18} />, path: '/notifications' },
     { name: 'KYC', icon: <ShieldCheck size={18} />, path: '/kyc' },
     { name: 'Integrations', icon: <Layers size={18} />, path: '/integrations' },
     { name: 'Settings', icon: <Settings size={18} />, path: '/settings' },
