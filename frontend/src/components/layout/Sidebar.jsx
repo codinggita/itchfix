@@ -65,8 +65,8 @@ const Sidebar = () => {
 
       {/* User Profile Section */}
       <div className="p-4 border-t border-border-main mt-auto">
-        <div className="bg-card-bg/50 rounded-[10px] p-3 flex items-center gap-3 border border-border-main/50">
-          <div className="w-8 h-8 rounded-full bg-trust-teal/20 flex items-center justify-center text-trust-teal">
+        <NavLink to="/profile" className="bg-card-bg/50 rounded-[10px] p-3 flex items-center gap-3 border border-border-main/50 hover:border-trust-teal/30 transition-all group">
+          <div className="w-8 h-8 rounded-full bg-trust-teal/20 flex items-center justify-center text-trust-teal group-hover:bg-trust-teal group-hover:text-page-bg transition-all">
             <User size={16} />
           </div>
           <div className="flex-1 min-w-0">
@@ -76,7 +76,7 @@ const Sidebar = () => {
               <span className="text-[10px] font-bold text-trust-teal uppercase tracking-wider">MSME Verified</span>
             </div>
           </div>
-        </div>
+        </NavLink>
       </div>
     </aside>
   );
