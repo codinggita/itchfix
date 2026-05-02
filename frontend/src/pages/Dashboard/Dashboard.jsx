@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SEO from '../../components/common/SEO';
 import MetricCard from '../../components/ui/MetricCard';
 import DataTable from '../../components/ui/Table';
@@ -7,9 +7,17 @@ import { DASHBOARD_STATS, RECENT_TRANSACTIONS } from '../../utils/constants';
 import { TrendingUp, AlertCircle, ShieldCheck, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Toast from '../../components/ui/Toast';
+import Skeleton, { SkeletonCard } from '../../components/ui/Skeleton';
 
 const Dashboard = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [toasts, setToasts] = useState([]);
+
+  useEffect(() => {
+    // Simulate initial data loading
+    const timer = setTimeout(() => setIsLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const addToast = (message, type = 'success') => {
     const id = Date.now();
@@ -110,15 +118,19 @@ const Dashboard = () => {
 
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-        {DASHBOARD_STATS.map((stat, index) => (
-          <MetricCard 
-            key={index}
-            title={stat.title}
-            value={stat.value}
-            color={stat.color}
-            subtext={stat.subtext}
-          />
-        ))}
+        {isLoading ? (
+          [...Array(4)].map((_, i) => <Skeleton key={i} className="h-32 rounded-card" />)
+        ) : (
+          DASHBOARD_STATS.map((stat, index) => (
+            <MetricCard 
+              key={index}
+              title={stat.title}
+              value={stat.value}
+              color={stat.color}
+              subtext={stat.subtext}
+            />
+          ))
+        )}
       </div>
 
       {/* Main Content Grid */}
@@ -135,7 +147,13 @@ const Dashboard = () => {
             </button>
           </div>
           <div className="overflow-hidden">
-            <DataTable columns={columns} data={RECENT_TRANSACTIONS} />
+            {isLoading ? (
+              <div className="space-y-3">
+                {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-16 w-full rounded-xl" />)}
+              </div>
+            ) : (
+              <DataTable columns={columns} data={RECENT_TRANSACTIONS} />
+            )}
           </div>
         </div>
 

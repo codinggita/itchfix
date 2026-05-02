@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, 
@@ -17,8 +17,9 @@ import Button from '../../components/ui/Button';
 import Badge from '../../components/ui/Badge';
 import SearchBar from '../../components/ui/SearchBar';
 import Toast from '../../components/ui/Toast';
-
 import { useNavigate } from 'react-router-dom';
+import Skeleton, { SkeletonCard } from '../../components/ui/Skeleton';
+import SEO from '../../components/common/SEO';
 
 const MarketplaceHeader = ({ onAction }) => {
   const navigate = useNavigate();
@@ -128,8 +129,14 @@ const ProductGrid = ({ onAction }) => {
 };
 
 export default function Marketplace() {
+  const [isLoading, setIsLoading] = useState(true);
   const [toasts, setToasts] = useState([]);
   const [activeTab, setActiveTab] = useState('All');
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const addToast = (message, type) => {
     const id = Date.now();
@@ -139,6 +146,7 @@ export default function Marketplace() {
 
   return (
     <div className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto">
+      <SEO title="Marketplace" description="Find and trade with verified Indian industrial suppliers." />
       <div className="fixed top-24 right-6 z-[200] space-y-4">
         <AnimatePresence>
           {toasts.map(t => (
@@ -148,7 +156,14 @@ export default function Marketplace() {
       </div>
       <MarketplaceHeader onAction={addToast} />
       <MarketplaceToolbar onAction={addToast} activeTab={activeTab} setActiveTab={setActiveTab} />
-      <ProductGrid onAction={addToast} />
+      
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[...Array(8)].map((_, i) => <SkeletonCard key={i} />)}
+        </div>
+      ) : (
+        <ProductGrid onAction={addToast} />
+      )}
       
       <section className="bg-trust-teal/5 border border-trust-teal/10 rounded-[32px] p-8 flex flex-col md:flex-row items-center justify-between gap-8">
         <div className="flex items-center gap-6">
