@@ -1,8 +1,22 @@
-import React from 'react';
-import { Search, Bell, Zap, HelpCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Bell, Zap, HelpCircle, Sun, Moon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
+  const [isDark, setIsDark] = useState(() => {
+    return localStorage.getItem('theme') !== 'light';
+  });
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.remove('light');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.add('light');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDark]);
+
   return (
     <header className="h-[48px] bg-page-bg border-b border-border-main flex items-center justify-between px-6 sticky top-0 z-40">
       {/* Left: Search */}
@@ -20,6 +34,14 @@ const Navbar = () => {
 
       {/* Right: Notifications & Plan */}
       <div className="flex items-center gap-4">
+        {/* Theme Toggle */}
+        <button 
+          onClick={() => setIsDark(!isDark)}
+          className="p-1.5 text-text-muted hover:text-text-secondary transition-colors"
+        >
+          {isDark ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
+
         {/* Growth Plan Pill */}
         <div className="flex items-center gap-2 bg-trust-purple/10 border border-trust-purple/20 px-3 py-1 rounded-pill">
           <Zap size={12} className="text-trust-purple" fill="currentColor" />
