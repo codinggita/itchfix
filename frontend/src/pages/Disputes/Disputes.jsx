@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   AlertTriangle, 
@@ -16,6 +16,8 @@ import Button from '../../components/ui/Button';
 import Badge from '../../components/ui/Badge';
 import DataTable from '../../components/ui/Table';
 import Toast from '../../components/ui/Toast';
+import SEO from '../../components/common/SEO';
+import Skeleton from '../../components/ui/Skeleton';
 
 const disputesData = [
   { id: 'DSP-102', txn: 'TXN-9021', partner: 'Reliance Textiles', type: 'Quality Mismatch', status: 'mediation', date: 'May 01, 2026' },
@@ -94,7 +96,14 @@ const DisputesTable = ({ onAction }) => {
 };
 
 export default function Disputes() {
+  const [isLoading, setIsLoading] = useState(true);
   const [toasts, setToasts] = useState([]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
   const addToast = (message, type) => {
     const id = Date.now();
     setToasts([...toasts, { id, message, type }]);
@@ -103,6 +112,7 @@ export default function Disputes() {
 
   return (
     <div className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto">
+      <SEO title="Disputes & Mediation" description="Resolve B2B trade conflicts with our regulated mediation service." />
       <div className="fixed top-24 right-6 z-[200] space-y-4">
         <AnimatePresence>
           {toasts.map(t => (
@@ -111,10 +121,24 @@ export default function Disputes() {
         </AnimatePresence>
       </div>
       <DisputesHeader onAction={addToast} />
-      <DisputesStats />
+      
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-24 rounded-card" />)}
+        </div>
+      ) : (
+        <DisputesStats />
+      )}
+
       <div className="space-y-4">
         <h2 className="text-lg font-display font-bold text-text-primary px-2">Active Cases</h2>
-        <DisputesTable onAction={addToast} />
+        {isLoading ? (
+          <div className="space-y-3">
+            {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-16 w-full rounded-xl" />)}
+          </div>
+        ) : (
+          <DisputesTable onAction={addToast} />
+        )}
       </div>
       
       <section className="bg-trust-red/5 border border-trust-red/20 rounded-card p-6 flex flex-col md:flex-row items-center justify-between gap-6">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Wallet as WalletIcon, 
@@ -16,6 +16,8 @@ import Breadcrumbs from '../../components/ui/Breadcrumbs';
 import Button from '../../components/ui/Button';
 import Badge from '../../components/ui/Badge';
 import Toast from '../../components/ui/Toast';
+import SEO from '../../components/common/SEO';
+import Skeleton from '../../components/ui/Skeleton';
 
 const WalletHeader = ({ onAction }) => (
   <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -124,7 +126,14 @@ const WalletActivity = ({ onAction }) => {
 };
 
 export default function Wallet() {
+  const [isLoading, setIsLoading] = useState(true);
   const [toasts, setToasts] = useState([]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 900);
+    return () => clearTimeout(timer);
+  }, []);
+
   const addToast = (message, type) => {
     const id = Date.now();
     setToasts([...toasts, { id, message, type }]);
@@ -133,6 +142,7 @@ export default function Wallet() {
 
   return (
     <div className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto">
+      <SEO title="Business Wallet" description="Manage your funds and escrow deposits securely." />
       <div className="fixed top-24 right-6 z-[200] space-y-4">
         <AnimatePresence>
           {toasts.map(t => (
@@ -141,8 +151,26 @@ export default function Wallet() {
         </AnimatePresence>
       </div>
       <WalletHeader onAction={addToast} />
-      <BalanceSection />
-      <WalletActivity onAction={addToast} />
+      
+      {isLoading ? (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Skeleton className="lg:col-span-2 h-64 rounded-[24px]" />
+          <Skeleton className="h-64 rounded-[24px]" />
+        </div>
+      ) : (
+        <BalanceSection />
+      )}
+
+      {isLoading ? (
+        <div className="space-y-4">
+          <Skeleton className="h-8 w-48 rounded mx-2" />
+          <div className="space-y-3">
+            {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-20 w-full rounded-xl" />)}
+          </div>
+        </div>
+      ) : (
+        <WalletActivity onAction={addToast} />
+      )}
       
       <section className="bg-card-bg border border-border-main rounded-[24px] p-6 flex items-center gap-6">
         <div className="w-12 h-12 rounded-full bg-trust-purple/10 text-trust-purple flex items-center justify-center shrink-0">

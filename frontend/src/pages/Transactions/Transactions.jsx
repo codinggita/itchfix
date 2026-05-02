@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, 
@@ -17,6 +17,9 @@ import Button from '../../components/ui/Button';
 import DataTable from '../../components/ui/Table';
 import Badge from '../../components/ui/Badge';
 import Toast from '../../components/ui/Toast';
+import SEO from '../../components/common/SEO';
+import Skeleton from '../../components/ui/Skeleton';
+import SearchBar from '../../components/ui/SearchBar';
 
 const transactionsData = [
   { id: 'TXN-9021', partner: 'Reliance Textiles', amount: '₹1,45,000', status: 'paid', date: 'May 02, 2026', type: 'Credit' },
@@ -95,7 +98,14 @@ const TransactionsList = ({ onAction }) => {
 };
 
 export default function Transactions() {
+  const [isLoading, setIsLoading] = useState(true);
   const [toasts, setToasts] = useState([]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 700);
+    return () => clearTimeout(timer);
+  }, []);
+
   const addToast = (message, type) => {
     const id = Date.now();
     setToasts([...toasts, { id, message, type }]);
@@ -104,6 +114,7 @@ export default function Transactions() {
 
   return (
     <div className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto">
+      <SEO title="Transaction History" description="View all your past and pending business transactions." />
       <div className="fixed top-24 right-6 z-[200] space-y-4">
         <AnimatePresence>
           {toasts.map(t => (
@@ -112,7 +123,15 @@ export default function Transactions() {
         </AnimatePresence>
       </div>
       <TransactionsHeader onAction={addToast} />
-      <TransactionStats />
+      
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-28 rounded-card" />)}
+        </div>
+      ) : (
+        <TransactionStats />
+      )}
+
       <div className="space-y-4">
         <div className="flex items-center justify-between px-2">
           <h2 className="text-lg font-display font-bold text-text-primary">All Transactions</h2>
@@ -121,7 +140,14 @@ export default function Transactions() {
             <Button variant="ghost" size="sm" className="border border-border-main"><Filter size={16} /></Button>
           </div>
         </div>
-        <TransactionsList onAction={addToast} />
+        
+        {isLoading ? (
+          <div className="space-y-3">
+            {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-16 w-full rounded-xl" />)}
+          </div>
+        ) : (
+          <TransactionsList onAction={addToast} />
+        )}
       </div>
     </div>
   );
