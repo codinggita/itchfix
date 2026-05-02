@@ -31,6 +31,20 @@
   --radius-pill: 20px;
 }
 
+@theme variant(light) {
+  --color-page-bg: #F8FAFC;
+  --color-card-bg: #FFFFFF;
+  --color-sidebar-bg: #F1F5F9;
+  --color-input-bg: #F8FAFC;
+  --color-border-main: #E2E8F0;
+
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #334155;
+  --color-text-muted: #64748B;
+  --color-text-faint: #94A3B8;
+  --color-text-ghost: #CBD5E1;
+}
+
 :root {
   font-family: "DM Sans", sans-serif;
   background-color: var(--color-page-bg);

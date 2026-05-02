@@ -1,4 +1,5 @@
 import React from 'react';
+import SEO from '../../components/common/SEO';
 import LandingNavbar from '../../components/layout/LandingNavbar';
 import HeroSection from '../../components/ui/HeroSection';
 import FeatureGrid from '../../components/ui/FeatureGrid';
@@ -14,6 +15,7 @@ import Button from '../../components/ui/Button';
 export default function LandingPage() {
   return (
     <div className="bg-page-bg min-h-screen">
+      <SEO title="Home" />
       <LandingNavbar />
       
       <main>

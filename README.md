@@ -1,102 +1,113 @@
-# ItchFix – Unified Ops & Insights for Indian SMEs
+# 💎 TrustBiz (formerly ItchFix) - Industry-Grade B2B Escrow & Marketplace
 
-One dashboard to fix payment reconciliation, KYC onboarding, and business health tracking for Indian small and medium enterprises.
+[![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)](https://vitejs.dev/)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Redux](https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white)](https://redux.js.org/)
 
----
-
-## Problem Statement
-
-Indian SMEs lose time, money, and customers due to three critical operational gaps:
-
-1.  **Fragmented Payment Reconciliation**
-    Manual matching of UPI, card, and netbanking payments across multiple bank statements wastes 10+ hours weekly.
-
-2.  **Manual KYC & Onboarding**
-    Paper-based or fragmented digital KYC slows down customer onboarding and drops conversion rates.
-
-3.  **No Real-Time Business Dashboard**
-    Business owners lack a single view of cash flow, outstanding payments, and growth metrics, leading to poor decisions.
-
-**Solution** – ItchFix combines all three solutions into one intelligent dashboard.
+**TrustBiz** is a high-performance B2B fintech platform designed to solve the "Trust Gap" in Indian MSME transactions. It combines a secure **RBI-regulated Escrow system** with a transparent **B2B Marketplace**, AI-powered **Payment Reconciliation**, and real-time **Business Analytics**.
 
 ---
 
-## Features
+## 🚀 Key Industry-Ready Features
 
-### Core Capabilities
+### 🛡️ Secure B2B Escrow & Mediation
+- **Milestone-based Payments**: Funds are securely held and released only upon milestone approvals (Advance, Quality Check, Final Delivery).
+- **Resolution Center**: Integrated dispute management with legal mediation policies for verified MSMEs.
+- **Node Account Integration**: Prepared structure for RBI-regulated fund handling.
 
-- **Auto-Reconciliation** – AI-powered matching of transactions with settlements
-- **KYC Automation** – Multi-step forms with drag-and-drop document upload and session recovery
-- **Business Health Dashboard** – Real-time charts, metrics, and location-based insights
-- **Integrations Marketplace** – 20+ pre-built connectors including Razorpay, PhonePe, and Google Sheets
-- **Google OAuth Login** – One-click secure authentication
-- **Push Notifications** – Real-time alerts via Firebase Cloud Messaging
-- **Light & Dark Mode** – Persistent theme preference using localStorage
+### 🛒 Intelligent B2B Marketplace
+- **Verified Supplier Network**: Instant trust scores and GSTIN verification for every partner.
+- **Bulk Sourcing**: Specialized inquiry flows for industrial-scale raw materials.
+- **Interactive Listings**: Real-time stock status and dynamic pricing.
 
-### Figma Pages Completed
+### 📊 Advanced Business Intelligence
+- **Growth Analytics**: Financial performance tracking with responsive Recharts (Revenue Trends, Escrow Volume).
+- **Auto-Reconciliation**: AI-ready matching of bank statements with sales invoices.
+- **Inventory Monitoring**: Smart stock alerts and automated reorder triggers.
 
-| Page | Description |
-|------|-------------|
-| Landing Page | 3D hero section with problem cards and integration strip |
-| Login / Signup | Google OAuth and form validation |
-| Dashboard Home | Key metrics, charts, and Google Maps widget |
-| Reconciliation Workspace | React Flow node-based matching canvas |
-| KYC Onboarding | Multi-step form with session storage and Cloudinary upload |
-| Integrations Marketplace | 20+ tool cards with search and category filters |
-| Tool Detail Pages | Dedicated connection flows for Razorpay, PhonePe, Zapier, and others |
-| Pricing Page | Monthly / yearly toggle with three plans and comparison table |
-| Resources Page | Blog posts, guides, case studies, and bookmarking |
-| Settings & Profile | Theme toggle, preferences, and account management |
+### ⚡ Technical Excellence (Placement Ready)
+- **State Management**: Redux Toolkit for centralized auth, UI, and data flow.
+- **Dynamic SEO**: Integrated `react-helmet-async` for page-specific meta tags and better indexing.
+- **Adaptive UI**: High-fidelity Dark/Light mode with persistent `localStorage` support.
+- **Optimized Performance**: Lazy loading, responsive layouts (Mobile-first), and framer-motion animations.
 
 ---
 
-## Tech Stack (Planned)
+## 🛠️ Tech Stack
 
 | Category | Technologies |
 |----------|--------------|
-| Frontend | React 19, Vite, Tailwind CSS, MUI |
-| State Management | Redux Toolkit |
-| Routing | React Router with lazy loading |
-| Forms & Validation | Formik, Yup |
-| Animations | Spline, Framer Motion, Lottie React, Lenis |
-| UI Components | shadcn/ui, React Flow, dnd-kit |
-| Charts | Recharts, Nivo |
-| Integrations | EmailJS, WhatsApp, Google OAuth, Cloudinary, Firebase, Google Maps, OpenAI |
+| **Frontend** | React 19, Vite, Tailwind CSS (v4 CSS-first config) |
+| **State** | Redux Toolkit (Slices, Store) |
+| **Routing** | React Router 7 |
+| **UI Icons** | Lucide React |
+| **Charts** | Recharts |
+| **SEO** | React Helmet Async |
+| **Animations** | Framer Motion |
 
 ---
 
-## Storage Strategy
+## 📂 Project Architecture
 
-| Storage Type | Purpose |
-|--------------|---------|
-| localStorage | Theme preference, authentication token, user preferences, connected integrations |
-| sessionStorage | KYC form progress, search queries, reconciliation filters, bookmarked resources |
-
----
-
-## Project Status
-
-- **Figma Design** – Completed
-- **Development** – Not started
-- **Deployment** – Not applicable yet
-
----
-
-## Figma Design
-
-View the complete interactive prototype here:  
-[ItchFix Figma Prototype](https://www.figma.com/proto/fLOpIySbuJA4Kd8L8Cq7vu/my-1st-asgn?page-id=51%3A7&node-id=430-5333&viewport=406%2C-611%2C0.02&t=4RSWAKbZTIIDakwX-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=430%3A5333&show-proto-sidebar=1)
-
-*Note: You may need to request access if the link is private.*
+```bash
+src/
+├── components/
+│   ├── common/      # Reusable SEO, ErrorBoundaries, Loaders
+│   ├── layout/      # Sidebar, Navbar, Footer
+│   ├── ui/          # Atomic components (Buttons, Cards, Tables)
+│   └── forms/       # Complex multi-step forms (KYC, Auth)
+├── pages/
+│   ├── Dashboard/   # Overview & Insights
+│   ├── Marketplace/ # B2B Shop & Checkout flow
+│   ├── Wallet/      # Funds & Bank management
+│   ├── Disputes/    # Mediation & Case management
+│   └── ...          # 15+ specialized screens
+├── store/           # Redux slices and configuration
+└── utils/           # Constants, Helpers, Validators
+```
 
 ---
 
-## License
+## 🚦 Getting Started
 
-Proprietary – All rights reserved.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/hetsakariya0111-gi/itchfix.git
+   ```
+2. **Install dependencies**
+   ```bash
+   cd itchfix/frontend
+   npm install
+   ```
+3. **Run Development Server**
+   ```bash
+   npm run dev
+   ```
 
 ---
 
-## Contact
+## 📈 Development Checklist (Sem 2 Standards)
 
-For questions or collaboration, please reach out via the WhatsApp or Email options available on the landing page.
+- [x] **Project Setup**: Vite + Tailwind + Feature-based architecture.
+- [x] **Routing**: Clean public/protected route structure.
+- [x] **State Management**: Redux Toolkit setup for global state.
+- [x] **SEO**: Dynamic titles and meta descriptions for all pages.
+- [x] **Theme**: Dark/Light mode with local persistence.
+- [x] **UX**: Skeleton loaders, Empty states, and Toast notifications.
+- [x] **Code Quality**: ESLint ready, consistent naming, and component isolation.
+
+---
+
+## 🎨 Design Reference
+
+Interactive Figma Prototype: [TrustBiz Figma](https://www.figma.com/proto/fLOpIySbuJA4Kd8L8Cq7vu/my-1st-asgn?page-id=51%3A7&node-id=430-5333&viewport=406%2C-611%2C0.02&t=4RSWAKbZTIIDakwX-1&scaling=scale-down&content-scaling=fixed&starting-point-node-id=430%3A5333&show-proto-sidebar=1)
+
+---
+
+## 👨‍💻 Author
+**Het Sakariya**  
+[GitHub](https://github.com/hetsakariya0111-gi) | [LinkedIn](your-linkedin-link)
+
+---
+*Note: This project is part of the Semester 2 Full Stack Assignment at CodingGita.*
